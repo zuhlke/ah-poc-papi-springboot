@@ -1,14 +1,7 @@
 language: java
 
-before_script:
-  - mvn clean
-
-script:
-  - mvn compile
-  - mvn test
-
 before_deploy:
-  - mvn package
+  - mvn clean verify
 
 deploy:
   provider: cloudfoundry
