@@ -3,14 +3,9 @@ language: java
 before_script:
   - mvn clean
 
-jobs:
-  include:
-    - stage: build
-      script:
-        - mvn compile
-    - stage: test
-      script:
-        - mvn test
+script:
+  - mvn compile
+  - mvn test
 
 
 #deploy:
