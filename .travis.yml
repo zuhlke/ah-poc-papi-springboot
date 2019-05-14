@@ -7,13 +7,15 @@ script:
   - mvn compile
   - mvn test
 
+before_deploy:
+  - mvn package
 
-#deploy:
-#  provider: cloudfoundry
-#  username: hulk_hogan@example.com
-#  password: supersecretpassword
-#  api: https://api.run.pivotal.io
-#  organization: myawesomeorganization
-#  space: staging
-#  manifest: manifest-staging.yml       # (optional)  Defaults to manifest.yml.
-#  app_name: My app name                # (optional)
+deploy:
+  provider: cloudfoundry
+  username: $PCF_USERNAME
+  password: $PCF_PASSWORD
+  api: $PCF_API
+  organization: $PCF_ORG
+  space: $PCF_SPACE
+  manifest: manifest.yml # (optional)  Defaults to manifest.yml.
+  app_name: ah-poc-papi-springboot # (optional)
