@@ -1,5 +1,6 @@
 package com.aimlesshammer.pocpapispringboot;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -7,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -20,20 +19,22 @@ public class SapiService {
 
     private RestTemplate restTemplate;
 
+    @Value( "${sapis.creditCardBalance.url}" )
+    private String creditCardBalanceUrl;
+    @Value( "${sapis.currentAccountBalance.url}" )
+    private String accountBalanceUrl;
+
     public SapiService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
 
     public List<BalanceRecord> getAllBalances(String customerId) {
-        String creditCardBalanceUrl = "https://ah-poc-sapi-cc-bal.cfapps.io/balance?customerId=" + customerId;
-        String accountBalanceUrl = "https://ah-poc-sapi-ca-bal.cfapps.io/balance?customerId=" + customerId;
-
         ResponseEntity<List<CreditCardBalance>> creditCardBalanceSapiResponse = restTemplate.exchange(creditCardBalanceUrl, HttpMethod.GET, null,
-                new ParameterizedTypeReference<List<CreditCardBalance>>() {});
+                new ParameterizedTypeReference<List<CreditCardBalance>>() {}, customerId);
         List<CreditCardBalance> creditCardBalanceList = creditCardBalanceSapiResponse.getBody();
 
         ResponseEntity<List<CurrentAccountBalance>> currentAccountBalanceSapiResponse = restTemplate.exchange(accountBalanceUrl, HttpMethod.GET, null,
-                new ParameterizedTypeReference<List<CurrentAccountBalance>>() {});
+                new ParameterizedTypeReference<List<CurrentAccountBalance>>() {}, customerId);
         List<CurrentAccountBalance> currentAccountBalanceList = currentAccountBalanceSapiResponse.getBody();
 
 

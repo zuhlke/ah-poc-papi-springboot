@@ -16,7 +16,7 @@ class BalanceController {
     }
 
     @GetMapping("/balance")
-    public List<BalanceRecord> greeting(@RequestParam("user-id") String userId) {
+    public List<BalanceRecord> greeting(@RequestParam("customer-id") String userId) {
         return sapiService.getAllBalances(userId);
     }
 }
