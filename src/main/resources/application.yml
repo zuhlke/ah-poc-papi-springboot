@@ -1,6 +1,13 @@
 server:
   port: ${PORT:8080}
 
+management:
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: "*"
+
 sapis:
   creditCardBalance:
     url: "https://ah-poc-sapi-cc-bal.cfapps.io/customer/{CUSTOMER_ID}/balance"
