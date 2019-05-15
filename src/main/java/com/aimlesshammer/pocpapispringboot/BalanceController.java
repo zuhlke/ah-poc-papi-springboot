@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-class BalanceController {
+public class BalanceController {
 
     private SapiService sapiService;
 
