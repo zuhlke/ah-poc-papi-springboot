@@ -1,5 +1,6 @@
 ---
 applications:
 - name: ah-poc-papi-springboot
-  memory: 768M
+  memory: 500M
   path: target/poc-papi-springboot-0.0.1-SNAPSHOT.jar
+  disk_quota: 200M
