@@ -13,6 +13,9 @@ public class CreditCardBalance {
         this.balance = balance;
     }
 
+    public CreditCardBalance() {
+    }
+
     public String getCustomerId() {
         return customerId;
     }

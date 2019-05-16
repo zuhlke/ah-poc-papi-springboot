@@ -13,6 +13,9 @@ public class CurrentAccountBalance {
         this.balance = balance;
     }
 
+    public CurrentAccountBalance() {
+    }
+
     public String getCustomerId() {
         return customerId;
     }

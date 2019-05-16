@@ -13,6 +13,8 @@ public class BalanceRecord {
         this.balance = balance;
     }
 
+    public BalanceRecord(){}
+
     public String getAccountType() {
         return accountType;
     }
