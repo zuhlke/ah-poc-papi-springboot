@@ -5,7 +5,7 @@ Aimless-Hammer PAPI Springboot implementation
 
 ## Summary
 
-Exposes a resource `GET /greeting` resource (by default on port 8080), which responds with "Hello World! :)".
+Exposes a resource `GET /balance` resource which requires a request parameter `customer-id`. The website in the description for this repo is an example of a valid call to this PAPI.
 
 ## Run the server locally
 
