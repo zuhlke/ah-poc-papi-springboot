@@ -11,18 +11,19 @@ import java.util.List;
 
 @RestController
 public class BalanceController {
+
     private static final Logger logger = LoggerFactory.getLogger(BalanceController.class);
     private SapiService sapiService;
-
     public BalanceController(SapiService sapiService) {
         this.sapiService = sapiService;
     }
 
     @GetMapping("/balance")
     public List<BalanceRecord> greeting(@RequestParam("customer-id") String customerId) {
-        logger.info("Requesting balances for customer: '{}'", customerId);
+        logger.info(PocPapiSpringbootApplication.LOG_ID + ": Requesting balances for customer: '{}'", customerId);
         List<BalanceRecord> allBalances = sapiService.getAllBalances(customerId);
-        logger.info("Returning aggregated balances for customer: '{}', balances: '{}'", customerId, allBalances);
+        logger.info(PocPapiSpringbootApplication.LOG_ID + ": Returning aggregated balances for customer: '{}', balances: '{}'", customerId, allBalances);
         return allBalances;
     }
+
 }
