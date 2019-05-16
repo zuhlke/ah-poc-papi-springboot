@@ -1,5 +1,6 @@
 package com.aimlesshammer.pocpapispringboot;
 
+import com.aimlesshammer.pocpapispringboot.model.BalanceRecord;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;

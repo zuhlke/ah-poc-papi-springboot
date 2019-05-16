@@ -1,5 +1,8 @@
 package com.aimlesshammer.pocpapispringboot;
 
+import com.aimlesshammer.pocpapispringboot.model.BalanceRecord;
+import com.aimlesshammer.pocpapispringboot.model.CreditCardBalance;
+import com.aimlesshammer.pocpapispringboot.model.CurrentAccountBalance;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;

@@ -1,15 +1,15 @@
-package com.aimlesshammer.pocpapispringboot;
+package com.aimlesshammer.pocpapispringboot.model;
 
 import java.util.Objects;
 
-public class CurrentAccountBalance {
+public class CreditCardBalance {
     private String customerId;
-    private String accountNumber;
+    private String creditCardNumber;
     private String balance;
 
-    public CurrentAccountBalance(String customerId, String accountNumber, String balance) {
+    public CreditCardBalance(String customerId, String creditCardNumber, String balance) {
         this.customerId = customerId;
-        this.accountNumber = accountNumber;
+        this.creditCardNumber = creditCardNumber;
         this.balance = balance;
     }
 
@@ -21,12 +21,12 @@ public class CurrentAccountBalance {
         this.customerId = customerId;
     }
 
-    public String getAccountNumber() {
-        return accountNumber;
+    public String getCreditCardNumber() {
+        return creditCardNumber;
     }
 
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
+    public void setCreditCardNumber(String creditCardNumber) {
+        this.creditCardNumber = creditCardNumber;
     }
 
     public String getBalance() {
@@ -41,7 +41,7 @@ public class CurrentAccountBalance {
     public String toString() {
         return "CreditCardBalance{" +
                 "customerId='" + customerId + '\'' +
-                ", accountNumber='" + accountNumber + '\'' +
+                ", creditCardNumber='" + creditCardNumber + '\'' +
                 ", balance='" + balance + '\'' +
                 '}';
     }
@@ -50,14 +50,14 @@ public class CurrentAccountBalance {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CurrentAccountBalance that = (CurrentAccountBalance) o;
+        CreditCardBalance that = (CreditCardBalance) o;
         return Objects.equals(customerId, that.customerId) &&
-                Objects.equals(accountNumber, that.accountNumber) &&
+                Objects.equals(creditCardNumber, that.creditCardNumber) &&
                 Objects.equals(balance, that.balance);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(customerId, accountNumber, balance);
+        return Objects.hash(customerId, creditCardNumber, balance);
     }
 }

@@ -1,4 +1,4 @@
-package com.aimlesshammer.pocpapispringboot;
+package com.aimlesshammer.pocpapispringboot.model;
 
 import java.util.Objects;
 
