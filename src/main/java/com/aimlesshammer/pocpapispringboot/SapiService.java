@@ -75,9 +75,9 @@ public class SapiService {
         System.out.println("into getSapiStatuses");
         try {
             System.out.println("into first try-block");
-            ParameterizedTypeReference<Health> reference = new ParameterizedTypeReference<Health>() {};
+            ParameterizedTypeReference<String> reference = new ParameterizedTypeReference<String>() {};
             System.out.println("before first rest call");
-            ResponseEntity<Health> ccEntity = restTemplate.exchange(creditCardHealth, HttpMethod.GET, null, reference);
+            ResponseEntity<String> ccEntity = restTemplate.exchange(creditCardHealth, HttpMethod.GET, null, reference);
             System.out.println("after first rest call");
             sapiStatuses.add(ccEntity.getStatusCode());
             logger.info("CC health retrieved");
