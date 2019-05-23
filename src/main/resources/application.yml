@@ -7,6 +7,7 @@ management:
     web:
       exposure:
         include: "*"
+        exclude: "prometheus"
 
 sapis:
   creditCardBalance:
