@@ -72,26 +72,18 @@ public class SapiService {
 
     List<HttpStatus> getSapiStatuses() {
         List<HttpStatus> sapiStatuses = new ArrayList<>();
-        System.out.println("into getSapiStatuses");
         ParameterizedTypeReference<String> reference = new ParameterizedTypeReference<String>() {};
         try {
-            System.out.println("into first try-block");
-            System.out.println("before first rest call");
             ResponseEntity<String> ccEntity = restTemplate.exchange(creditCardHealth, HttpMethod.GET, null, reference);
-            System.out.println("after first rest call");
             sapiStatuses.add(ccEntity.getStatusCode());
-            logger.info("CC health retrieved");
         } catch (HttpStatusCodeException exception) {
             sapiStatuses.add(exception.getStatusCode());
-            logger.info("CC health retrieved not");
         }
         try {
             ResponseEntity<String> caEntity = restTemplate.exchange(currentAccountHealth, HttpMethod.GET, null, reference);
             sapiStatuses.add(caEntity.getStatusCode());
-            logger.info("CA health retrieved");
         } catch (HttpStatusCodeException exception) {
             sapiStatuses.add(exception.getStatusCode());
-            logger.info("CA health retrieved not");
         }
         return sapiStatuses;
     }
