@@ -75,14 +75,18 @@ public class SapiService {
         try {
             ResponseEntity<Health> ccEntity = restTemplate.exchange(creditCardHealth, HttpMethod.GET, null, new ParameterizedTypeReference<Health>() {});
             sapiStatuses.add(ccEntity.getStatusCode());
+            logger.info("CC health retrieved");
         } catch (HttpStatusCodeException exception) {
             sapiStatuses.add(exception.getStatusCode());
+            logger.info("CC health retrieved not");
         }
         try {
             ResponseEntity<Health> caEntity = restTemplate.exchange(currentAccountHealth, HttpMethod.GET, null, new ParameterizedTypeReference<Health>() {});
             sapiStatuses.add(caEntity.getStatusCode());
+            logger.info("CA health retrieved");
         } catch (HttpStatusCodeException exception) {
             sapiStatuses.add(exception.getStatusCode());
+            logger.info("CA health retrieved not");
         }
         return sapiStatuses;
     }
