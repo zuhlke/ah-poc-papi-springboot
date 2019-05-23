@@ -18,6 +18,7 @@ public class PapiHealthIndicator implements HealthIndicator {
     public Health health() {
         System.out.println("into health method");
         int errorCode = check();
+        System.out.println("after check method");
         if (errorCode != 0) {
             return Health.down().withDetail("Error Code", errorCode).build();
         }
@@ -26,6 +27,7 @@ public class PapiHealthIndicator implements HealthIndicator {
     }
 
     private int check() {
+        System.out.println("into check method");
         return (int) sapiService
             .getSapiStatuses()
             .stream()
