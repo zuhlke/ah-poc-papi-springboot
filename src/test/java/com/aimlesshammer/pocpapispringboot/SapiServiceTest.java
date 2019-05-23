@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withServerError;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 @RunWith(SpringRunner.class)
@@ -37,6 +39,10 @@ public class SapiServiceTest {
     private String creditCardBalanceUrl;
     @Value("${sapis.currentAccountBalance.url}")
     private String currentAccountBalanceUrl;
+    @Value("${sapis.creditCardBalance.health}")
+    private String creditCardHealth;
+    @Value("${sapis.creditCardBalance.health}")
+    private String currentAccountHealth;
 
     private static final String creditCardBalance = "[\n" +
             "  {\n" +
@@ -65,4 +71,28 @@ public class SapiServiceTest {
         expected.add(new BalanceRecord("currentAccount", "64746383648", "34.50"));
         assertEquals(expected, sapiService.getAllBalances(customerId));
     }
+
+    @Test
+    public void testGetSapiStatusesHappy() {
+        this.server.expect(requestTo(creditCardHealth)).andRespond(withSuccess("", MediaType.APPLICATION_JSON));
+        this.server.expect(requestTo(currentAccountHealth)).andRespond(withSuccess("", MediaType.APPLICATION_JSON));
+        final List<HttpStatus> expected = new ArrayList<>();
+        expected.add(HttpStatus.OK);
+        expected.add(HttpStatus.OK);
+        assertEquals(expected, sapiService.getSapiStatuses());
+    }
+
+    @Test
+    public void testGetSapiStatusesUnhappy() {
+        this.server.expect(requestTo(creditCardHealth)).andRespond(withSuccess("", MediaType.APPLICATION_JSON));
+        this.server.expect(requestTo(currentAccountHealth)).andRespond(withServerError());
+        final List<HttpStatus> expected = new ArrayList<>();
+        expected.add(HttpStatus.OK);
+        expected.add(HttpStatus.INTERNAL_SERVER_ERROR);
+        System.out.println(expected);
+        List<HttpStatus> actual = sapiService.getSapiStatuses();
+        System.out.println(actual);
+        assertEquals(expected, actual);
+    }
+
 }
