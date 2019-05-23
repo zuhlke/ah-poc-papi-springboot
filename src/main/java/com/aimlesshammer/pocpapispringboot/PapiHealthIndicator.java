@@ -16,10 +16,12 @@ public class PapiHealthIndicator implements HealthIndicator {
 
     @Override
     public Health health() {
+        System.out.println("into health method");
         int errorCode = check();
         if (errorCode != 0) {
             return Health.down().withDetail("Error Code", errorCode).build();
         }
+        System.out.println("FUCK");
         return Health.up().build();
     }
 
