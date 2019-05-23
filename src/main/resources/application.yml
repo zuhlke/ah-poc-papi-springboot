@@ -11,5 +11,7 @@ management:
 sapis:
   creditCardBalance:
     url: "https://ah-poc-sapi-cc-bal.cfapps.io/customer/{CUSTOMER_ID}/balance"
+    health: "https://ah-poc-sapi-cc-bal.cfapps.io/actuator/health"
   currentAccountBalance:
     url: "https://ah-poc-sapi-ca-bal.cfapps.io/customer/{CUSTOMER_ID}/balance"
+    health: "https://ah-poc-sapi-ca-bal.cfapps.io/actuator/health"
