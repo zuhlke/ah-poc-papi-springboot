@@ -72,8 +72,11 @@ public class SapiService {
 
     List<HttpStatus> getSapiStatuses() {
         List<HttpStatus> sapiStatuses = new ArrayList<>();
+        System.out.println("into getSapiStatuses");
         try {
+            System.out.println("into first try-block");
             ResponseEntity<Health> ccEntity = restTemplate.exchange(creditCardHealth, HttpMethod.GET, null, new ParameterizedTypeReference<Health>() {});
+            System.out.println("after first rest call");
             sapiStatuses.add(ccEntity.getStatusCode());
             logger.info("CC health retrieved");
         } catch (HttpStatusCodeException exception) {
