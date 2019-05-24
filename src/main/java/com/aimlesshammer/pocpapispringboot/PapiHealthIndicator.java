@@ -17,6 +17,7 @@ public class PapiHealthIndicator implements HealthIndicator {
 
     @Override
     public Health health() {
+        System.out.println("in health");
         int errorCode = check();
         if (errorCode != 0) {
             return Health.down().withDetail("Error Code", errorCode).build();
