@@ -25,6 +25,7 @@ public class PapiHealthIndicator implements HealthIndicator {
     }
 
     private int check() {
+        System.out.println("In check");
         return (int) sapiService
             .getStatuses()
             .stream()
