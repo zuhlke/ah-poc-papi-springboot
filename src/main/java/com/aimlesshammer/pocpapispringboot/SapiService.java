@@ -11,10 +11,10 @@ import com.aimlesshammer.pocpapispringboot.model.CurrentAccountBalance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.health.Status;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -23,9 +23,9 @@ import static java.util.stream.Collectors.toList;
 
 @Service
 public class SapiService {
+
     private static final Logger logger = LoggerFactory.getLogger(SapiService.class);
     private static final String CUSTOMER_ID_KEY = "{CUSTOMER_ID}";
-
     private RestTemplate restTemplate;
 
     @Value("${sapis.creditCardBalance.url}")
@@ -56,7 +56,6 @@ public class SapiService {
         List<CurrentAccountBalance> currentAccountBalanceList = currentAccountBalanceSapiResponse.getBody();
         logger.info(PocPapiSpringbootApplication.LOG_ID + ": Call to '{}' returned '{}' response with payload: '{}'", currentAccountBalance, currentAccountBalanceSapiResponse.getStatusCode(), currentAccountBalanceList);
 
-
         List<BalanceRecord> ccBalance = creditCardBalanceList.stream()
             .map(cc -> new BalanceRecord("creditCardAccount", cc.getCreditCardNumber(), cc.getBalance()))
             .collect(toList());
@@ -68,24 +67,25 @@ public class SapiService {
             .collect(Collectors.toList());
     }
 
-    List<HttpStatus> getStatuses() {
-        List<HttpStatus> sapiStatuses = new ArrayList<>();
-        ParameterizedTypeReference<String> reference = new ParameterizedTypeReference<String>() {};
-        try {
-            ResponseEntity<String> ccEntity = restTemplate.exchange(creditCardHealth, HttpMethod.GET, null, reference);
-            sapiStatuses.add(ccEntity.getStatusCode());
-        } catch (HttpStatusCodeException exception) {
-            sapiStatuses.add(exception.getStatusCode());
-        }
-        try {
-            ResponseEntity<String> caEntity = restTemplate.exchange(currentAccountHealth, HttpMethod.GET, null, reference);
-            sapiStatuses.add(caEntity.getStatusCode());
-        } catch (HttpStatusCodeException exception) {
-            sapiStatuses.add(exception.getStatusCode());
-        }
-        logger.info("sapi statuses:" + sapiStatuses);
+    List<Status> getStatuses() {
+        List<Status> statuses = new ArrayList<>();
+        statuses.add(getStatus(creditCardHealth));
+        statuses.add(getStatus(currentAccountHealth));
+        logger.info("statuses: " + statuses);
+        return statuses;
+    }
 
-        return sapiStatuses;
+    private Status getStatus(String urlString) {
+        try {
+            ResponseEntity<Status> entity = restTemplate.exchange(urlString, HttpMethod.GET, null, Status.class);
+            if (entity.getStatusCode().is2xxSuccessful()) {
+                return entity.getBody();
+            } else {
+                return Status.UNKNOWN;
+            }
+        } catch (HttpStatusCodeException exception) {
+            return Status.OUT_OF_SERVICE;
+        }
     }
 
 }
