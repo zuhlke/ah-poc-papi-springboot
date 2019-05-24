@@ -24,7 +24,7 @@ public class PapiHealthIndicatorTest {
     @Test
     public void testPapiOutOfService_WhenOneSapiDown() {
         SapiService service = Mockito.mock (SapiService.class);
-        when(service.getSapiStatuses ()).thenReturn (Arrays.asList (HttpStatus.I_AM_A_TEAPOT, HttpStatus.OK));
+        when(service.getSapiStatuses ()).thenReturn (Arrays.asList ( HttpStatus.OK, HttpStatus.NOT_FOUND));
         final PapiHealthIndicator papiHealthIndicator = new PapiHealthIndicator(service);
         Health health = papiHealthIndicator.health ();
         assertEquals (Status.DOWN, health.getStatus ());

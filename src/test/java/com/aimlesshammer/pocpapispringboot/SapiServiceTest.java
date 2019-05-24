@@ -17,7 +17,9 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withNoContent;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withServerError;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 @RunWith(SpringRunner.class)
@@ -41,7 +43,7 @@ public class SapiServiceTest {
     private String currentAccountBalanceUrl;
     @Value("${sapis.creditCardBalance.health}")
     private String creditCardHealth;
-    @Value("${sapis.creditCardBalance.health}")
+    @Value("${sapis.currentAccountBalance.health}")
     private String currentAccountHealth;
 
     private static final String creditCardBalance = "[\n" +
@@ -85,13 +87,11 @@ public class SapiServiceTest {
     @Test
     public void testGetSapiStatusesUnhappy() {
         this.server.expect(requestTo(creditCardHealth)).andRespond(withSuccess("", MediaType.APPLICATION_JSON));
-        this.server.expect(requestTo(currentAccountHealth)).andRespond(withServerError());
+        this.server.expect(requestTo(currentAccountHealth)).andRespond(withStatus(HttpStatus.NOT_FOUND));
         final List<HttpStatus> expected = new ArrayList<>();
         expected.add(HttpStatus.OK);
-        expected.add(HttpStatus.INTERNAL_SERVER_ERROR);
-        System.out.println(expected);
+        expected.add(HttpStatus.NOT_FOUND);
         List<HttpStatus> actual = sapiService.getSapiStatuses();
-        System.out.println(actual);
         assertEquals(expected, actual);
     }
 
