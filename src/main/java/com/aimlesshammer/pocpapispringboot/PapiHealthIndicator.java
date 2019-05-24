@@ -25,7 +25,7 @@ public class PapiHealthIndicator implements HealthIndicator {
 
     private int check() {
         return (int) sapiService
-            .getSapiStatuses()
+            .getStatuses()
             .stream()
             .filter(status -> !status.is2xxSuccessful())
             .count();

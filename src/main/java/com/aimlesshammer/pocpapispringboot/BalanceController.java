@@ -1,13 +1,12 @@
 package com.aimlesshammer.pocpapispringboot;
 
+import java.util.List;
 import com.aimlesshammer.pocpapispringboot.model.BalanceRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 public class BalanceController {
@@ -21,7 +20,7 @@ public class BalanceController {
     @GetMapping("/balance")
     public List<BalanceRecord> greeting(@RequestParam("customer-id") String customerId) {
         logger.info(PocPapiSpringbootApplication.LOG_ID + ": Requesting balances for customer: '{}'", customerId);
-        List<BalanceRecord> allBalances = sapiService.getAllBalances(customerId);
+        List<BalanceRecord> allBalances = sapiService.getBalances(customerId);
         logger.info(PocPapiSpringbootApplication.LOG_ID + ": Returning aggregated balances for customer: '{}', balances: '{}'", customerId, allBalances);
         return allBalances;
     }

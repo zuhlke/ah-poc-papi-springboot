@@ -1,6 +1,10 @@
 
 package com.aimlesshammer.pocpapispringboot;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import com.aimlesshammer.pocpapispringboot.model.BalanceRecord;
 import com.aimlesshammer.pocpapispringboot.model.CreditCardBalance;
 import com.aimlesshammer.pocpapispringboot.model.CurrentAccountBalance;
@@ -15,11 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -42,7 +41,7 @@ public class SapiService {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    List<BalanceRecord> getAllBalances(String customerId) {
+    List<BalanceRecord> getBalances(String customerId) {
         String creditCardBalanceCustomerUrl = creditCardBalanceUrlTemplate.replace(CUSTOMER_ID_KEY, customerId);
         ResponseEntity<List<CreditCardBalance>> creditCardBalanceSapiResponse = restTemplate.exchange(creditCardBalanceCustomerUrl, HttpMethod.GET, null,
             new ParameterizedTypeReference<List<CreditCardBalance>>() {
@@ -69,7 +68,7 @@ public class SapiService {
             .collect(Collectors.toList());
     }
 
-    List<HttpStatus> getSapiStatuses() {
+    List<HttpStatus> getStatuses() {
         List<HttpStatus> sapiStatuses = new ArrayList<>();
         ParameterizedTypeReference<String> reference = new ParameterizedTypeReference<String>() {};
         try {
@@ -84,6 +83,8 @@ public class SapiService {
         } catch (HttpStatusCodeException exception) {
             sapiStatuses.add(exception.getStatusCode());
         }
+        logger.info("sapi statuses:" + sapiStatuses);
+
         return sapiStatuses;
     }
 
