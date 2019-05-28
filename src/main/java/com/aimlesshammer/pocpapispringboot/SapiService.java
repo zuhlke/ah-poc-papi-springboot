@@ -69,9 +69,7 @@ public class SapiService {
 
     List<HealthStatus> getStatuses() {
         List<HealthStatus> statuses = new ArrayList<>();
-        System.out.println("before CC");
         statuses.add(getStatus(creditCardHealth));
-        System.out.println("before CA");
         statuses.add(getStatus(currentAccountHealth));
         logger.info("statuses: " + statuses);
         return statuses;
