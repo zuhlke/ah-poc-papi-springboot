@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import com.aimlesshammer.pocpapispringboot.model.BalanceRecord;
+import com.aimlesshammer.pocpapispringboot.model.HealthStatus;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.actuate.health.Status;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,10 +33,14 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 public class SapiServiceTest {
 
     // these are the forms that the JSON must take to be converted into the corresponding Status objects
-    private static String statusStringUp = "{\"code\":\"UP\",\"description\":\"\"}";
-    private static String statusStringDown = "{\"code\":\"DOWN\",\"description\":\"\"}";
-    private static String statusStringUnknown = "{\"code\":\"UNKNOWN\",\"description\":\"\"}";
-    private static String statusStringOutOfService = "{\"code\":\"OUT_OF_SERVICE\",\"description\":\"\"}";
+    private static HealthStatus statusUp = new HealthStatus("UP");
+    private static HealthStatus statusDown = new HealthStatus("DOWN");
+    private static HealthStatus statusUnknown = new HealthStatus("UNKNOWN");
+    private static HealthStatus statusOutOfService = new HealthStatus("OUT_OF_SERVICE");
+    private static String statusStringUp = statusUp.toJSONString();
+    private static String statusStringDown = statusDown.toJSONString();
+    private static String statusStringUnknown = statusUnknown.toJSONString();
+    private static String statusStringOutOfService = statusOutOfService.toJSONString();
     @Autowired
     private SapiService unit;
     @Autowired
@@ -82,8 +86,8 @@ public class SapiServiceTest {
     public void itGetsStatuses_whenBothOk() {
         this.server.expect(requestTo(creditCardHealth)).andRespond(withSuccess(statusStringUp, MediaType.APPLICATION_JSON));
         this.server.expect(requestTo(currentAccountHealth)).andRespond(withSuccess(statusStringUp, MediaType.APPLICATION_JSON));
-        final List<Status> expected = Arrays.asList(Status.UP, Status.UP);
-        final List<Status> actual = unit.getStatuses();
+        final List<HealthStatus> expected = Arrays.asList(statusUp, statusUp);
+        final List<HealthStatus> actual = unit.getStatuses();
         assertEquals(expected, actual);
     }
 
@@ -92,8 +96,8 @@ public class SapiServiceTest {
     public void itGetsStatuses_whenOneNotFound() {
         this.server.expect(requestTo(creditCardHealth)).andRespond(withSuccess(statusStringUp, MediaType.APPLICATION_JSON));
         this.server.expect(requestTo(currentAccountHealth)).andRespond(withStatus(HttpStatus.NOT_FOUND));
-        final List<Status> expected = Arrays.asList(Status.UP, Status.OUT_OF_SERVICE);
-        List<Status> actual = unit.getStatuses();
+        final List<HealthStatus> expected = Arrays.asList(statusUp, statusOutOfService);
+        List<HealthStatus> actual = unit.getStatuses();
         assertEquals(expected, actual);
     }
 
@@ -102,8 +106,8 @@ public class SapiServiceTest {
     public void itGetsStatuses_whenOneSapiSHealthIsDown() {
         this.server.expect(requestTo(creditCardHealth)).andRespond(withSuccess(statusStringUp, MediaType.APPLICATION_JSON));
         this.server.expect(requestTo(currentAccountHealth)).andRespond(withSuccess(statusStringDown, MediaType.APPLICATION_JSON));
-        final List<Status> expected = Arrays.asList(Status.UP, Status.DOWN);
-        List<Status> actual = unit.getStatuses();
+        final List<HealthStatus> expected = Arrays.asList(statusUp, statusDown);
+        List<HealthStatus> actual = unit.getStatuses();
         assertEquals(expected, actual);
     }
 
@@ -112,8 +116,8 @@ public class SapiServiceTest {
     public void itGetsStatuses_whenOneSapiIsNotRunning() {
         this.server.expect(requestTo(creditCardHealth)).andRespond(withSuccess(statusStringUp, MediaType.APPLICATION_JSON));
         this.server.expect(requestTo(currentAccountHealth)).andRespond(withServerError());
-        final List<Status> expected = Arrays.asList(Status.UP, Status.OUT_OF_SERVICE);
-        List<Status> actual = unit.getStatuses();
+        final List<HealthStatus> expected = Arrays.asList(statusUp, statusOutOfService);
+        List<HealthStatus> actual = unit.getStatuses();
         assertEquals(expected, actual);
     }
 

@@ -8,10 +8,10 @@ import java.util.stream.Stream;
 import com.aimlesshammer.pocpapispringboot.model.BalanceRecord;
 import com.aimlesshammer.pocpapispringboot.model.CreditCardBalance;
 import com.aimlesshammer.pocpapispringboot.model.CurrentAccountBalance;
+import com.aimlesshammer.pocpapispringboot.model.HealthStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.actuate.health.Status;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -67,8 +67,8 @@ public class SapiService {
             .collect(Collectors.toList());
     }
 
-    List<Status> getStatuses() {
-        List<Status> statuses = new ArrayList<>();
+    List<HealthStatus> getStatuses() {
+        List<HealthStatus> statuses = new ArrayList<>();
         System.out.println("before CC");
         statuses.add(getStatus(creditCardHealth));
         System.out.println("before CA");
@@ -77,16 +77,16 @@ public class SapiService {
         return statuses;
     }
 
-    private Status getStatus(String urlString) {
+    private HealthStatus getStatus(String urlString) {
         try {
-            ResponseEntity<Status> entity = restTemplate.exchange(urlString, HttpMethod.GET, null, Status.class);
+            ResponseEntity<HealthStatus> entity = restTemplate.exchange(urlString, HttpMethod.GET, null, HealthStatus.class);
             if (entity.getStatusCode().is2xxSuccessful()) {
                 return entity.getBody();
             } else {
-                return Status.UNKNOWN;
+                return new HealthStatus("UNKNOWN");
             }
         } catch (HttpStatusCodeException exception) {
-            return Status.OUT_OF_SERVICE;
+            return new HealthStatus("OUT_OF_SERVICE");
         }
     }
 

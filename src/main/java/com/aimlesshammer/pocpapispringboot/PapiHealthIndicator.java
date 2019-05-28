@@ -1,9 +1,9 @@
 
 package com.aimlesshammer.pocpapispringboot;
 
+import com.aimlesshammer.pocpapispringboot.model.HealthStatus;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.boot.actuate.health.Status;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -30,7 +30,7 @@ public class PapiHealthIndicator implements HealthIndicator {
         return (int) sapiService
             .getStatuses()
             .stream()
-            .filter(status -> !status.equals(Status.UP))
+            .filter(status -> !status.equals(new HealthStatus("UP")))
             .count();
     }
 
