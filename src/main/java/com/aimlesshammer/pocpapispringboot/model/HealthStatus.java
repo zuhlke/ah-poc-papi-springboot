@@ -35,13 +35,9 @@ public class HealthStatus {
         return Objects.hash(status);
     }
 
+    @Override
     public String toString() {
         String jsonString = "%s";
-        return String.format(jsonString, getStatus());
-    }
-
-    public String toJSONString() {
-        String jsonString = "{\"status\":\"%s\"}";
         return String.format(jsonString, getStatus());
     }
 

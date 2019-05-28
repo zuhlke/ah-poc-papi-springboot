@@ -37,10 +37,10 @@ public class SapiServiceTest {
     private static HealthStatus statusDown = new HealthStatus("DOWN");
     private static HealthStatus statusUnknown = new HealthStatus("UNKNOWN");
     private static HealthStatus statusOutOfService = new HealthStatus("OUT_OF_SERVICE");
-    private static String statusStringUp = statusUp.toJSONString();
-    private static String statusStringDown = statusDown.toJSONString();
-    private static String statusStringUnknown = statusUnknown.toJSONString();
-    private static String statusStringOutOfService = statusOutOfService.toJSONString();
+    private static String statusStringUp = jsonString(statusUp);
+    private static String statusStringDown = jsonString(statusDown);
+    private static String statusStringUnknown = jsonString(statusUnknown);
+    private static String statusStringOutOfService = jsonString(statusOutOfService);
     @Autowired
     private SapiService unit;
     @Autowired
@@ -91,13 +91,18 @@ public class SapiServiceTest {
         assertEquals(expected, actual);
     }
 
+    private static String jsonString(HealthStatus healthStatus) {
+        String jsonString = "{\"status\":\"%s\"}";
+        return String.format(jsonString, healthStatus.getStatus());
+    }
+
     // one 200, one 404 response
     @Test
     public void itGetsStatuses_whenOneNotFound() {
         this.server.expect(requestTo(creditCardHealth)).andRespond(withSuccess(statusStringUp, MediaType.APPLICATION_JSON));
         this.server.expect(requestTo(currentAccountHealth)).andRespond(withStatus(HttpStatus.NOT_FOUND));
         final List<HealthStatus> expected = Arrays.asList(statusUp, statusOutOfService);
-        List<HealthStatus> actual = unit.getStatuses();
+        final List<HealthStatus> actual = unit.getStatuses();
         assertEquals(expected, actual);
     }
 
@@ -107,7 +112,7 @@ public class SapiServiceTest {
         this.server.expect(requestTo(creditCardHealth)).andRespond(withSuccess(statusStringUp, MediaType.APPLICATION_JSON));
         this.server.expect(requestTo(currentAccountHealth)).andRespond(withSuccess(statusStringDown, MediaType.APPLICATION_JSON));
         final List<HealthStatus> expected = Arrays.asList(statusUp, statusDown);
-        List<HealthStatus> actual = unit.getStatuses();
+        final List<HealthStatus> actual = unit.getStatuses();
         assertEquals(expected, actual);
     }
 
@@ -117,7 +122,7 @@ public class SapiServiceTest {
         this.server.expect(requestTo(creditCardHealth)).andRespond(withSuccess(statusStringUp, MediaType.APPLICATION_JSON));
         this.server.expect(requestTo(currentAccountHealth)).andRespond(withServerError());
         final List<HealthStatus> expected = Arrays.asList(statusUp, statusOutOfService);
-        List<HealthStatus> actual = unit.getStatuses();
+        final List<HealthStatus> actual = unit.getStatuses();
         assertEquals(expected, actual);
     }
 
