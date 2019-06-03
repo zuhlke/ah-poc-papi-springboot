@@ -57,5 +57,4 @@ public class CreditCardBalanceSapi implements Sapi<CreditCardBalance> {
                     .build();
         }
     }
-
 }

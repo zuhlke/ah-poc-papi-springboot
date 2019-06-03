@@ -6,9 +6,7 @@ import com.aimlesshammer.pocpapispringboot.model.CreditCardBalance;
 import com.aimlesshammer.pocpapispringboot.model.CurrentAccountBalance;
 import com.aimlesshammer.pocpapispringboot.sapis.CreditCardBalanceSapi;
 import com.aimlesshammer.pocpapispringboot.sapis.CurrentAccountBalanceSapi;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,14 +17,11 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class BalanceService {
 
-    private RestTemplate restTemplate;
     private CreditCardBalanceSapi creditCardBalanceSapi;
     private CurrentAccountBalanceSapi currentAccountBalanceSapi;
 
-    public BalanceService(RestTemplateBuilder restTemplateBuilder,
-                          CreditCardBalanceSapi creditCardBalanceSapi,
+    public BalanceService(CreditCardBalanceSapi creditCardBalanceSapi,
                           CurrentAccountBalanceSapi currentAccountBalanceSapi) {
-        this.restTemplate = restTemplateBuilder.build();
         this.creditCardBalanceSapi = creditCardBalanceSapi;
         this.currentAccountBalanceSapi = currentAccountBalanceSapi;
     }
