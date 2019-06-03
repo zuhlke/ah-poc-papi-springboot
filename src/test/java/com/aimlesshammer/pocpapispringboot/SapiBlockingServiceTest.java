@@ -1,10 +1,6 @@
 
 package com.aimlesshammer.pocpapispringboot;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import com.aimlesshammer.pocpapispringboot.model.BalanceRecord;
 import com.aimlesshammer.pocpapispringboot.model.HealthStatus;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,21 +12,25 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.client.MockRestServiceServer;
+import schema.GenericBalance;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withServerError;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.*;
 
 @RunWith(SpringRunner.class)
-@RestClientTest(SapiService.class)
+@RestClientTest(SapiBlockingService.class)
 @TestPropertySource(
     properties = {
-        "sapis.creditCardBalance.url=https://ah-poc-sapi-cc-bal.cfapps.io/customer/{CUSTOMER_ID}/balance",
-        "sapis.currentAccountBalance.url=https://ah-poc-sapi-ca-bal.cfapps.io/customer/{CUSTOMER_ID}/balance"
+            "sapi.creditCardBalance.url=https://ah-poc-sapi-cc-bal.cfapps.io/customer/{CUSTOMER_ID}/balance",
+            "sapi.currentAccountBalance.url=https://ah-poc-sapi-ca-bal.cfapps.io/customer/{CUSTOMER_ID}/balance"
     }
 )
-public class SapiServiceTest {
+public class SapiBlockingServiceTest {
 
     // these are the forms that the JSON must take to be converted into the corresponding Status objects
     private static HealthStatus statusUp = new HealthStatus("UP");
@@ -42,16 +42,16 @@ public class SapiServiceTest {
     private static String statusStringUnknown = jsonString(statusUnknown);
     private static String statusStringOutOfService = jsonString(statusOutOfService);
     @Autowired
-    private SapiService unit;
+    private SapiBlockingService unit;
     @Autowired
     private MockRestServiceServer server;
-    @Value("${sapis.creditCardBalance.url}")
+    @Value("${sapi.creditCardBalance.url}")
     private String creditCardBalanceUrl;
-    @Value("${sapis.currentAccountBalance.url}")
+    @Value("${sapi.currentAccountBalance.url}")
     private String currentAccountBalanceUrl;
-    @Value("${sapis.creditCardBalance.health}")
+    @Value("${sapi.creditCardBalance.health}")
     private String creditCardHealth;
-    @Value("${sapis.currentAccountBalance.health}")
+    @Value("${sapi.currentAccountBalance.health}")
     private String currentAccountHealth;
 
     private static final String creditCardBalance = "[\n" +
@@ -75,9 +75,9 @@ public class SapiServiceTest {
         final String customerId = "10101010";
         this.server.expect(requestTo(creditCardBalanceUrl.replace("{CUSTOMER_ID}", customerId))).andRespond(withSuccess(creditCardBalance, MediaType.APPLICATION_JSON));
         this.server.expect(requestTo(currentAccountBalanceUrl.replace("{CUSTOMER_ID}", customerId))).andRespond(withSuccess(accountBalance, MediaType.APPLICATION_JSON));
-        final List<BalanceRecord> expected = new ArrayList<>();
-        expected.add(new BalanceRecord("creditCardAccount", "1234567890", "1234.50"));
-        expected.add(new BalanceRecord("currentAccount", "64746383648", "34.50"));
+        final List<GenericBalance> expected = new ArrayList<>();
+        expected.add(new GenericBalance("creditCardAccount", "1234567890", "1234.50"));
+        expected.add(new GenericBalance("currentAccount", "64746383648", "34.50"));
         assertEquals(expected, unit.getBalances(customerId));
     }
 

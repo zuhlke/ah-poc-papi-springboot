@@ -12,10 +12,13 @@ import org.springframework.web.util.UriTemplate;
 import reactor.core.publisher.Mono;
 import reactor.retry.Retry;
 import schema.CurrentAccountBalance;
+import schema.GenericBalance;
 
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class AccountBalanceRetriever {
@@ -38,7 +41,7 @@ public class AccountBalanceRetriever {
         this.webClient = webClient;
     }
 
-    public Mono<List<CurrentAccountBalance>> getCurrentAccountBalance(String customerId) {
+    public Mono<List<GenericBalance>> getCurrentAccountBalance(String customerId) {
         logger.info("Getting current account balance for customer {}", customerId);
 
         String url = expandUrl(currentAccountBalanceUrlTemplate, customerId);
@@ -50,6 +53,9 @@ public class AccountBalanceRetriever {
                 .onStatus(HttpStatus::isError, response -> Mono.error(new SapiApiException(API_ERROR + ": " + response.statusCode())))
                 .bodyToMono(CurrentAccountBalance[].class)
                 .map(Arrays::asList)
+                .map(List::stream)
+                .map(ccb -> ccb.map(cc -> new GenericBalance("CurrentAccount", cc.getAccountNumber(), cc.getBalance()))
+                        .collect(toList()))
                 .retryWhen(Retry.any()
                         .fixedBackoff(Duration.ofSeconds(backoff))
                         .retryMax(retries));

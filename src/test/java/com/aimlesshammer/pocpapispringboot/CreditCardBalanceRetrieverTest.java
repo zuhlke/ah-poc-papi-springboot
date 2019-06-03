@@ -12,7 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-import schema.CreditCardBalance;
+import schema.GenericBalance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,8 +64,8 @@ public class CreditCardBalanceRetrieverTest {
                 .withBody(response)
                 .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE)));
 
-        List<CreditCardBalance> ccbs = new ArrayList<>();
-        CreditCardBalance ccb = new CreditCardBalance("1", "1234567890", "1234.50");
+        List<GenericBalance> ccbs = new ArrayList<>();
+        GenericBalance ccb = new GenericBalance("CreditCardAccount", "1234567890", "1234.50");
         ccbs.add(ccb);
 
         assertEquals(ccbs, retriever.getCreditCardBalance("1").block());

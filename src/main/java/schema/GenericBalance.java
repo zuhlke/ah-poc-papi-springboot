@@ -9,14 +9,14 @@ import java.util.Objects;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "customerId",
+        "accountType",
         "accountNumber",
         "balance"
 })
-public class CurrentAccountBalance {
+public class GenericBalance {
 
-    @JsonProperty("customerId")
-    private String customerId;
+    @JsonProperty("accountType")
+    private String accountType;
     @JsonProperty("accountNumber")
     private String accountNumber;
     @JsonProperty("balance")
@@ -26,31 +26,30 @@ public class CurrentAccountBalance {
 
     /**
      * No args constructor for use in serialization
-     */
-    public CurrentAccountBalance() {
-        super();
+     **/
+    public GenericBalance() {
     }
 
     /**
      * @param balance
      * @param accountNumber
-     * @param customerId
+     * @param accountType
      */
-    public CurrentAccountBalance(String customerId, String accountNumber, String balance) {
+    public GenericBalance(String accountType, String accountNumber, String balance) {
         super();
-        this.customerId = customerId;
+        this.accountType = accountType;
         this.accountNumber = accountNumber;
         this.balance = balance;
     }
 
-    @JsonProperty("customerId")
-    public String getCustomerId() {
-        return customerId;
+    @JsonProperty("accountType")
+    public String getAccountType() {
+        return accountType;
     }
 
-    @JsonProperty("customerId")
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
+    @JsonProperty("accountType")
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
     }
 
     @JsonProperty("accountNumber")
@@ -87,8 +86,8 @@ public class CurrentAccountBalance {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CurrentAccountBalance that = (CurrentAccountBalance) o;
-        return Objects.equals(customerId, that.customerId) &&
+        GenericBalance that = (GenericBalance) o;
+        return Objects.equals(accountType, that.accountType) &&
                 Objects.equals(accountNumber, that.accountNumber) &&
                 Objects.equals(balance, that.balance) &&
                 Objects.equals(additionalProperties, that.additionalProperties);
@@ -96,6 +95,6 @@ public class CurrentAccountBalance {
 
     @Override
     public int hashCode() {
-        return Objects.hash(customerId, accountNumber, balance, additionalProperties);
+        return Objects.hash(accountType, accountNumber, balance, additionalProperties);
     }
 }

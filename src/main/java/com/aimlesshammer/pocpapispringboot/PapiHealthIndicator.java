@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class PapiHealthIndicator implements HealthIndicator {
 
-    private SapiService sapiService;
+    private SapiBlockingService sapiBlockingService;
 
-    public PapiHealthIndicator(SapiService sapiService) {
-        this.sapiService = sapiService;
+    public PapiHealthIndicator(SapiBlockingService sapiBlockingService) {
+        this.sapiBlockingService = sapiBlockingService;
     }
 
     @Override
@@ -25,7 +25,7 @@ public class PapiHealthIndicator implements HealthIndicator {
     }
 
     private int check() {
-        return (int) sapiService
+        return (int) sapiBlockingService
             .getStatuses()
             .stream()
             .filter(status -> !status.equals(new HealthStatus("UP")))

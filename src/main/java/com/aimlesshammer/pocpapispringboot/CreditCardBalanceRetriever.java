@@ -12,10 +12,13 @@ import org.springframework.web.util.UriTemplate;
 import reactor.core.publisher.Mono;
 import reactor.retry.Retry;
 import schema.CreditCardBalance;
+import schema.GenericBalance;
 
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class CreditCardBalanceRetriever {
@@ -38,7 +41,7 @@ public class CreditCardBalanceRetriever {
         this.webClient = webClient;
     }
 
-    public Mono<List<CreditCardBalance>> getCreditCardBalance(String customerId) {
+    public Mono<List<GenericBalance>> getCreditCardBalance(String customerId) {
         logger.info("Getting credit card balances for customer {}", customerId);
 
         String url = expandUrl(creditCardBalanceUrlTemplate, customerId);
@@ -50,6 +53,9 @@ public class CreditCardBalanceRetriever {
                 .onStatus(HttpStatus::isError, response -> Mono.error(new SapiApiException(API_ERROR + ": " + response.statusCode())))
                 .bodyToMono(CreditCardBalance[].class)
                 .map(Arrays::asList)
+                .map(List::stream)
+                .map(ccb -> ccb.map(cc -> new GenericBalance("CreditCardAccount", cc.getCreditCardNumber(), cc.getBalance()))
+                        .collect(toList()))
                 .retryWhen(Retry.any()
                         .fixedBackoff(Duration.ofSeconds(backoff))
                         .retryMax(retries));

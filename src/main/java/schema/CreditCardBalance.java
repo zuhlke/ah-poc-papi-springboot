@@ -13,7 +13,7 @@ import java.util.Objects;
         "creditCardNumber",
         "balance"
 })
-public class CreditCardBalance {
+public class CreditCardBalance extends GenericBalance {
 
     @JsonProperty("customerId")
     private String customerId;
@@ -28,6 +28,7 @@ public class CreditCardBalance {
      * No args constructor for use in serialization
      */
     public CreditCardBalance() {
+        super();
     }
 
     /**

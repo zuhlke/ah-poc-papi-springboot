@@ -12,7 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-import schema.CurrentAccountBalance;
+import schema.GenericBalance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,8 +64,8 @@ public class AccountBalanceRetrieverTest {
                 .withBody(response)
                 .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE)));
 
-        List<CurrentAccountBalance> ccbs = new ArrayList<>();
-        CurrentAccountBalance ccb = new CurrentAccountBalance("1", "64746383648", "34.50");
+        List<GenericBalance> ccbs = new ArrayList<>();
+        GenericBalance ccb = new GenericBalance("CurrentAccount", "64746383648", "34.50");
         ccbs.add(ccb);
 
         assertEquals(ccbs, retriever.getCurrentAccountBalance("1").block());
