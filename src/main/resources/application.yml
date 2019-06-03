@@ -9,7 +9,12 @@ management:
       exposure:
         include: "*"
 
-sapis:
+sapi:
+  timeout: 1000
+  retries: 3
+  backoff: 3
+  delay: 0
+
   creditCardBalance:
     url: "https://ah-poc-sapi-cc-bal.cfapps.io/customer/{CUSTOMER_ID}/balance"
     health: "https://ah-poc-sapi-cc-bal.cfapps.io/actuator/health"
