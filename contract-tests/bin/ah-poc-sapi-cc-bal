@@ -1,0 +1,1 @@
+./gradlew jar && java -jar build/libs/contract-tests-1.0-SNAPSHOT.jar http://ah-poc-sapi-cc-bal.cfapps.io
