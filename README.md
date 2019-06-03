@@ -27,6 +27,13 @@ Exposes a resource `GET /balance` resource which requires a request parameter `c
 
 ## Contract tests
 
-This PAPI is dependent on the ah-poc-sapi-cc-bal SAPI, so to get automatic feedback about the integration of these APIs, the PAPI defines an executable contract against the SAPI. This contract is
-run against the SAPI in the SAPI's pipeline. The contract test artifact, a jar, is committed to source control so that it is accessible by the providers to this PAPI, so they can access it for use
-in their pipelines.
+The contract tests are defined in the submodule called `contract-tests/`. When built, this produces a program which executes contract tests against a defined endpoint.
+
+There is a script in there called `build-contract`, which builds the contract from source.  It creates a jar using gradle, and puts it in a place where providers can find it.
+
+- Currently that is within this repository, however it could also be some kind of file repository or cloud storage facility.
+
+Executable files in `bin/` execute contract tests against providers deployed into the PCF space called 'development'.
+
+- Currently 'development' is the only PCF space we deploy to at all. In a more realistic scenario, we would likely use results from the contract tests to decide whether to push to an environment
+closer to production. That kind of deployment behaviour is currently out of scope in this PoC.
