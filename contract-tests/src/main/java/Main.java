@@ -5,5 +5,6 @@ public class Main {
         String originOfEndpointUnderTest = args[0];
         ContractTester contractTester = new CreditCardSapiContractTester(originOfEndpointUnderTest);
         contractTester.runTests();
+        System.out.println("Contract Tests Passed!");
     }
 }
