@@ -13,11 +13,11 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class PocPapiSpringbootApplicationTests {
 
 	@Autowired
-	SapiService sapiService;
+    BalanceService balanceService;
 
 	@Test
 	public void itLoadsApplicationWithDefaultConfig() {
-		assertThat(sapiService).isNotNull();
+		assertThat(balanceService).isNotNull();
 	}
 
 }

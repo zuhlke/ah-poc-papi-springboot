@@ -2,11 +2,13 @@ server:
   port: ${PORT:8080}
 
 management:
-  endpoints:
+  endpoint:
     enabled-by-default: true
     web:
       exposure:
         include: "*"
+    health:
+      show-details: always
 
 sapis:
   creditCardBalance:
