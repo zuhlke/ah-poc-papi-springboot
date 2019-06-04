@@ -4,6 +4,7 @@ import com.aimlesshammer.pocpapispringboot.model.HealthStatus;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,8 +29,13 @@ public abstract class Sapi<T> implements HealthIndicator {
     @Override
     public Health health() {
         try {
-            restTemplate.exchange(healthUrl, GET, null, HealthStatus.class);
-            return Health.up().build();
+            ResponseEntity<HealthStatus> healthStatus = restTemplate.exchange(healthUrl, GET, null, HealthStatus.class);
+            String sapiStatus = healthStatus.getBody().getStatus();
+            if(sapiStatus.equalsIgnoreCase("UP")){
+                return Health.up().build();
+            } else {
+                return Health.unknown().withDetail("status", sapiStatus).build();
+            }
         } catch (HttpStatusCodeException exception) {
             return Health.down(exception)
                     .withDetail("status", exception.getRawStatusCode())

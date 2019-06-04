@@ -60,9 +60,17 @@ public class CreditCardBalanceSapiTest {
     }
 
     @Test
-    public void healthIsUpWhenSapiHealthEndpointReturns2XX() {
+    public void healthIsUpWhenSapiHealthEndpointReturns2XXAndStatusIsUp() {
         this.server.expect(requestTo(creditCardHealth)).andRespond(withSuccess(healthStatusResponse("UP"), APPLICATION_JSON));
         Health expected = Health.up().build();
+        Health actual = unit.health();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void healthIsUnknownWhenSapiHealthEndpointReturns2XXAndStatusIsNotUP() {
+        this.server.expect(requestTo(creditCardHealth)).andRespond(withSuccess(healthStatusResponse("CUP"), APPLICATION_JSON));
+        Health expected = Health.unknown().withDetail("status", "CUP").build();
         Health actual = unit.health();
         assertEquals(expected, actual);
     }
