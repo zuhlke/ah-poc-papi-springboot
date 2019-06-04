@@ -22,8 +22,8 @@ public class CreditCardBalanceSapi extends Sapi<CreditCardBalance> {
 
     public CreditCardBalanceSapi(
             RestTemplateBuilder restTemplateBuilder,
-            @Value("${sapis.creditCardBalance.url}") String dataUrlTemplate,
-            @Value("${sapis.creditCardBalance.health}") String healthUrl) {
+            @Value("${sapi.creditCardBalance.url}") String dataUrlTemplate,
+            @Value("${sapi.creditCardBalance.health}") String healthUrl) {
         super(restTemplateBuilder, healthUrl);
         this.dataUrlTemplate = dataUrlTemplate;
     }

@@ -1,7 +1,6 @@
 
 package com.aimlesshammer.pocpapispringboot;
 
-import com.aimlesshammer.pocpapispringboot.model.BalanceRecord;
 import com.aimlesshammer.pocpapispringboot.model.CreditCardBalance;
 import com.aimlesshammer.pocpapispringboot.model.CurrentAccountBalance;
 import com.aimlesshammer.pocpapispringboot.sapis.CreditCardBalanceSapi;
@@ -13,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.client.MockRestServiceServer;
+import schema.GenericBalance;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,9 +44,9 @@ public class BalanceServiceTest {
         when(creditCardBalanceSapi.getData(customerId)).thenReturn(Collections.singletonList(new CreditCardBalance(customerId, creditCardNumber, creditCardBalance)));
         when(currentAccountBalanceSapi.getData(customerId)).thenReturn(Collections.singletonList(new CurrentAccountBalance(customerId, currentAccountNumber, currentAccountBalance)));
 
-        List<BalanceRecord> expected = new ArrayList<>();
-        expected.add(new BalanceRecord("creditCardAccount", creditCardNumber, creditCardBalance));
-        expected.add(new BalanceRecord("currentAccount", currentAccountNumber, currentAccountBalance));
+        List<GenericBalance> expected = new ArrayList<>();
+        expected.add(new GenericBalance("creditCardAccount", creditCardNumber, creditCardBalance));
+        expected.add(new GenericBalance("currentAccount", currentAccountNumber, currentAccountBalance));
         assertEquals(expected, unit.getBalances(customerId));
     }
 }

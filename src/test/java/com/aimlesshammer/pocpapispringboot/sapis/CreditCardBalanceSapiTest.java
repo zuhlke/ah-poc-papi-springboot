@@ -17,13 +17,14 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.*;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withBadRequest;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 @RunWith(SpringRunner.class)
 @RestClientTest(CreditCardBalanceSapi.class)
 @TestPropertySource(
         properties = {
-                "sapis.creditCardBalance.url=https://ah-poc-sapi-cc-bal.cfapps.io/customer/{CUSTOMER_ID}/balance"
+                "sapi.creditCardBalance.url=https://ah-poc-sapi-cc-bal.cfapps.io/customer/{CUSTOMER_ID}/balance"
         }
 )
 public class CreditCardBalanceSapiTest {
@@ -32,9 +33,9 @@ public class CreditCardBalanceSapiTest {
     private CreditCardBalanceSapi unit;
     @Autowired
     private MockRestServiceServer server;
-    @Value("${sapis.creditCardBalance.url}")
+    @Value("${sapi.creditCardBalance.url}")
     private String creditCardBalanceUrl;
-    @Value("${sapis.creditCardBalance.health}")
+    @Value("${sapi.creditCardBalance.health}")
     private String creditCardHealth;
 
     private static final String creditCardBalance = "[\n" +

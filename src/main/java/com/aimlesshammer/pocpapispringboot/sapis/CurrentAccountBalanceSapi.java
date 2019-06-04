@@ -21,8 +21,8 @@ public class CurrentAccountBalanceSapi extends Sapi<CurrentAccountBalance> {
 
     public CurrentAccountBalanceSapi(
             RestTemplateBuilder restTemplateBuilder,
-            @Value("${sapis.currentAccountBalance.url}") String dataUrlTemplate,
-            @Value("${sapis.currentAccountBalance.health}") String healthUrl) {
+            @Value("${sapi.currentAccountBalance.url}") String dataUrlTemplate,
+            @Value("${sapi.currentAccountBalance.health}") String healthUrl) {
         super(restTemplateBuilder, healthUrl);
         this.dataUrlTemplate = dataUrlTemplate;
     }
