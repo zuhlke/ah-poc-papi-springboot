@@ -16,7 +16,7 @@ import static org.springframework.http.HttpMethod.GET;
 @Component
 public class CreditCardBalanceSapi extends Sapi<CreditCardBalance> {
 
-    private static final Logger logger = LoggerFactory.getLogger(CurrentAccountBalanceSapi.class);
+    private static final Logger logger = LoggerFactory.getLogger(CreditCardBalanceSapi.class);
 
     private final String dataUrlTemplate;
 
