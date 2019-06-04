@@ -37,3 +37,26 @@ Executable files in `bin/` execute contract tests against providers deployed int
 
 - Currently 'development' is the only PCF space we deploy to at all. In a more realistic scenario, we would likely use results from the contract tests to decide whether to push to an environment
 closer to production. That kind of deployment behaviour is currently out of scope in this PoC.
+
+## Example
+
+If you hit this API with a request like
+
+`GET localhost:8080/reactive-balance?customer-id=10101010`
+
+then you'll get the response body below:
+
+```
+[
+    {
+        "accountType": "CreditCardAccount",
+        "accountNumber": "1234567890",
+        "balance": "1234.50"
+    },
+    {
+        "accountType": "CurrentAccount",
+        "accountNumber": "64746383648",
+        "balance": "34.50"
+    }
+]
+```
