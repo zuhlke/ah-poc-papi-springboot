@@ -23,5 +23,7 @@ sapis:
 
 info:
   dependencies:
-    - url: ${sapis.creditCardBalance.info}
-    - url: ${sapis.currentAccountBalance.info}
+    creditCardBalanceSapi:
+      url: ${sapis.creditCardBalance.info}
+    currentAccountBalanceSapi:
+      url: ${sapis.currentAccountBalance.info}
