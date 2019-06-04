@@ -1,0 +1,1 @@
+./gradlew jar && mv build/libs/contract-tests-1.0-SNAPSHOT.jar contract-test-jar/contract-tests.jar

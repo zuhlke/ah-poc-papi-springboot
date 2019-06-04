@@ -2,11 +2,13 @@ server:
   port: ${PORT:8080}
 
 management:
-  endpoints:
+  endpoint:
     enabled-by-default: true
     web:
       exposure:
         include: "*"
+    health:
+      show-details: always
 
 sapi:
   timeout: 1000
@@ -17,6 +19,16 @@ sapi:
   creditCardBalance:
     url: "https://ah-poc-sapi-cc-bal.cfapps.io/customer/{CUSTOMER_ID}/balance"
     health: "https://ah-poc-sapi-cc-bal.cfapps.io/actuator/health"
+    info: "https://ah-poc-sapi-cc-bal.cfapps.io/actuator/info"
   currentAccountBalance:
     url: "https://ah-poc-sapi-ca-bal.cfapps.io/customer/{CUSTOMER_ID}/balance"
     health: "https://ah-poc-sapi-ca-bal.cfapps.io/actuator/health"
+    info: "https://ah-poc-sapi-ca-bal.cfapps.io/actuator/info"
+
+
+info:
+  dependencies:
+    creditCardBalanceSapi:
+      url: ${sapis.creditCardBalance.info}
+    currentAccountBalanceSapi:
+      url: ${sapis.currentAccountBalance.info}

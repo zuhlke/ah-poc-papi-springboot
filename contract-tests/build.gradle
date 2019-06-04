@@ -24,3 +24,7 @@ jar {
         attributes("Main-Class": "Main")
     }
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.10.3'
+}
