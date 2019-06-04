@@ -14,18 +14,18 @@ import java.util.List;
 public class BalanceController {
 
     private static final Logger logger = LoggerFactory.getLogger(BalanceController.class);
-    private SapiBlockingService sapiBlockingService;
+    private BalanceBlockingService balanceBlockingService;
     private SapiNonBlockingService sapiNonBlockingService;
 
-    public BalanceController(SapiBlockingService sapiBlockingService, SapiNonBlockingService sapiNonBlockingService) {
-        this.sapiBlockingService = sapiBlockingService;
+    public BalanceController(BalanceBlockingService balanceBlockingService, SapiNonBlockingService sapiNonBlockingService) {
+        this.balanceBlockingService = balanceBlockingService;
         this.sapiNonBlockingService = sapiNonBlockingService;
     }
 
     @GetMapping("/balance")
     public List<GenericBalance> getBalances(@RequestParam("customer-id") String customerId) {
         logger.info(PocPapiSpringbootApplication.LOG_ID + ": Requesting balances for customer: '{}'", customerId);
-        List<GenericBalance> allBalances = sapiBlockingService.getBalances(customerId).collectList().block();
+        List<GenericBalance> allBalances = balanceBlockingService.getBalances(customerId);
         logger.info(PocPapiSpringbootApplication.LOG_ID + ": Returning aggregated balances for customer: '{}', balances: '{}'", customerId, allBalances);
         return allBalances;
     }

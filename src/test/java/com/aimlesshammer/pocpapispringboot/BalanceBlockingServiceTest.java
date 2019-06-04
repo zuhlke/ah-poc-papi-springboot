@@ -22,15 +22,15 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
-@RestClientTest(BalanceService.class)
-public class BalanceServiceTest {
+@RestClientTest(BalanceBlockingService.class)
+public class BalanceBlockingServiceTest {
 
     @MockBean
     private CreditCardBalanceSapi creditCardBalanceSapi;
     @MockBean
     private CurrentAccountBalanceSapi currentAccountBalanceSapi;
     @Autowired
-    private BalanceService unit;
+    private BalanceBlockingService unit;
     @Autowired
     private MockRestServiceServer server;
 
