@@ -15,13 +15,13 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
 
 @Service
-public class BalanceService {
+public class BalanceBlockingService {
 
     private CreditCardBalanceSapi creditCardBalanceSapi;
     private CurrentAccountBalanceSapi currentAccountBalanceSapi;
 
-    public BalanceService(CreditCardBalanceSapi creditCardBalanceSapi,
-                          CurrentAccountBalanceSapi currentAccountBalanceSapi) {
+    public BalanceBlockingService(CreditCardBalanceSapi creditCardBalanceSapi,
+                                  CurrentAccountBalanceSapi currentAccountBalanceSapi) {
         this.creditCardBalanceSapi = creditCardBalanceSapi;
         this.currentAccountBalanceSapi = currentAccountBalanceSapi;
     }

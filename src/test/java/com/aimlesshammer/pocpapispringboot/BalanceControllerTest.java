@@ -7,7 +7,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import reactor.core.publisher.Flux;
 
 import java.util.Collections;
 
@@ -26,14 +25,14 @@ public class BalanceControllerTest {
     private MockMvc mvc;
 
     @MockBean
-    private SapiBlockingService sapiBlockingService;
+    private BalanceBlockingService sapiBlockingService;
 
     @MockBean
     private SapiNonBlockingService sapiNonBlockingService;
 
     @Test
     public void itGetAllBalancesFromSapiService() throws Exception {
-        when(sapiBlockingService.getBalances("1")).thenReturn(Flux.fromIterable(Collections.emptyList()));
+        when(sapiBlockingService.getBalances("1")).thenReturn(Collections.emptyList());
 
         this.mvc.perform(get("/balance").param("customer-id", "1"))
                 .andDo(print())
