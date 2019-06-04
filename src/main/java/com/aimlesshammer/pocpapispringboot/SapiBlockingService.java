@@ -14,17 +14,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
+import reactor.core.publisher.Flux;
 import schema.GenericBalance;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
 @Service
-public class SapiBlockingService {
+public class SapiBlockingService implements SapiService {
 
     private static final Logger logger = LoggerFactory.getLogger(SapiBlockingService.class);
     private static final String CUSTOMER_ID_KEY = "{CUSTOMER_ID}";
@@ -43,7 +43,8 @@ public class SapiBlockingService {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public List<GenericBalance> getBalances(String customerId) {
+    @Override
+    public Flux<GenericBalance> getBalances(String customerId) {
         String creditCardBalanceCustomerUrl = creditCardBalanceUrlTemplate.replace(CUSTOMER_ID_KEY, customerId);
         ResponseEntity<List<CreditCardBalance>> creditCardBalanceSapiResponse = restTemplate.exchange(creditCardBalanceCustomerUrl, HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<CreditCardBalance>>() {
@@ -65,11 +66,13 @@ public class SapiBlockingService {
                 .map(cc -> new GenericBalance("currentAccount", cc.getAccountNumber(), cc.getBalance()))
                 .collect(toList());
 
-        return Stream.concat(ccBalance.stream(), acBalance.stream())
-                .collect(Collectors.toList());
+        List<GenericBalance> mergedBalancesList = Stream.concat(ccBalance.stream(), acBalance.stream())
+                .collect(toList());
+
+        return Flux.fromIterable(mergedBalancesList);
     }
 
-    public List<HealthStatus> getStatuses() {
+    List<HealthStatus> getStatuses() {
         List<HealthStatus> statuses = new ArrayList<>();
         statuses.add(getStatus(creditCardHealth));
         statuses.add(getStatus(currentAccountHealth));

@@ -78,7 +78,7 @@ public class SapiBlockingServiceTest {
         final List<GenericBalance> expected = new ArrayList<>();
         expected.add(new GenericBalance("creditCardAccount", "1234567890", "1234.50"));
         expected.add(new GenericBalance("currentAccount", "64746383648", "34.50"));
-        assertEquals(expected, unit.getBalances(customerId));
+        assertEquals(expected, unit.getBalances(customerId).collectList().block());
     }
 
     // happy path, both 200 responses (UP, UP)

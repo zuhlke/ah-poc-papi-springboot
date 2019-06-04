@@ -25,7 +25,7 @@ public class BalanceController {
     @GetMapping("/balance")
     public List<GenericBalance> getBalances(@RequestParam("customer-id") String customerId) {
         logger.info(PocPapiSpringbootApplication.LOG_ID + ": Requesting balances for customer: '{}'", customerId);
-        List<GenericBalance> allBalances = sapiBlockingService.getBalances(customerId);
+        List<GenericBalance> allBalances = sapiBlockingService.getBalances(customerId).collectList().block();
         logger.info(PocPapiSpringbootApplication.LOG_ID + ": Returning aggregated balances for customer: '{}', balances: '{}'", customerId, allBalances);
         return allBalances;
     }

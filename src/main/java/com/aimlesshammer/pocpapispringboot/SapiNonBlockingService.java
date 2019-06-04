@@ -9,7 +9,7 @@ import reactor.core.publisher.Flux;
 import schema.GenericBalance;
 
 @Service
-public class SapiNonBlockingService {
+public class SapiNonBlockingService implements SapiService {
 
     private static final Logger logger = LoggerFactory.getLogger(SapiNonBlockingService.class);
     private CreditCardBalanceRetriever creditCardBalanceRetriever;
@@ -21,6 +21,7 @@ public class SapiNonBlockingService {
         this.accountBalanceRetriever = accountBalanceRetriever;
     }
 
+    @Override
     public Flux<GenericBalance> getBalances(String customerId) {
         Flux<GenericBalance> ccbs = creditCardBalanceRetriever.getCreditCardBalance(customerId)
                 .flatMapMany(Flux::fromIterable);

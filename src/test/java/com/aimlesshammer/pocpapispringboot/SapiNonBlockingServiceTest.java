@@ -10,8 +10,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import schema.GenericBalance;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -21,29 +20,25 @@ import static org.mockito.Mockito.when;
 public class SapiNonBlockingServiceTest {
 
     @Autowired
-    SapiNonBlockingService sapiNonBlockingService;
+    private SapiNonBlockingService sapiNonBlockingService;
 
     @MockBean
-    CreditCardBalanceRetriever creditCardBalanceRetriever;
+    private CreditCardBalanceRetriever creditCardBalanceRetriever;
 
     @MockBean
-    AccountBalanceRetriever accountBalanceRetriever;
+    private AccountBalanceRetriever accountBalanceRetriever;
 
     @Test
     public void itGetsAllBalances() {
-        List<GenericBalance> ccbs = new ArrayList<>();
         GenericBalance ccb = new GenericBalance("CreditCardAccount", "123", "10.5");
-        ccbs.add(ccb);
-        when(creditCardBalanceRetriever.getCreditCardBalance("1")).thenReturn(Mono.just(ccbs));
+        when(creditCardBalanceRetriever.getCreditCardBalance("1")).thenReturn(Mono.just(Collections.singletonList(ccb)));
 
-        List<GenericBalance> cabs = new ArrayList<>();
         GenericBalance cab = new GenericBalance("CurrentAccount", "123", "10.5");
-        cabs.add(cab);
-        when(accountBalanceRetriever.getCurrentAccountBalance("1")).thenReturn(Mono.just(cabs));
+        when(accountBalanceRetriever.getCurrentAccountBalance("1")).thenReturn(Mono.just(Collections.singletonList(cab)));
 
         Flux<GenericBalance> balances = sapiNonBlockingService.getBalances("1");
 
-        assertEquals(ccbs, balances.blockFirst());
-        assertEquals(cabs, balances.blockLast());
+        assertEquals(ccb, balances.blockFirst());
+        assertEquals(cab, balances.blockLast());
     }
 }

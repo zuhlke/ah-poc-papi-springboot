@@ -8,7 +8,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import reactor.core.publisher.Flux;
-import schema.GenericBalance;
 
 import java.util.Collections;
 
@@ -34,26 +33,9 @@ public class BalanceControllerTest {
 
     @Test
     public void itGetAllBalancesFromSapiService() throws Exception {
-        when(sapiBlockingService.getBalances("1")).thenReturn(Collections.emptyList());
+        when(sapiBlockingService.getBalances("1")).thenReturn(Flux.fromIterable(Collections.emptyList()));
 
         this.mvc.perform(get("/balance").param("customer-id", "1"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(equalTo("[]")));
-    }
-
-    @Test
-    public void itGetAllBalancesFromReactiveSapiService() throws Exception {
-        Flux<GenericBalance> expected = Flux.just(
-                new GenericBalance("CreditCardAccount", "1", "10.5"),
-                new GenericBalance("CurrentAccount", "2", "11.5"),
-                new GenericBalance("CurrentAccount", "3", "12.5")
-        );
-
-        when(sapiNonBlockingService.getBalances("1")).thenReturn(expected);
-
-
-        this.mvc.perform(get("/reactive-balance").param("customer-id", "1"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(equalTo("[]")));
