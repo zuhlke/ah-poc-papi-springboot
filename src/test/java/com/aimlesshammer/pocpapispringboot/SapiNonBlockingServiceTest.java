@@ -41,12 +41,9 @@ public class SapiNonBlockingServiceTest {
         cabs.add(cab);
         when(accountBalanceRetriever.getCurrentAccountBalance("1")).thenReturn(Mono.just(cabs));
 
-        List<GenericBalance> expected1 = new ArrayList<>();
-        expected1.add(ccb);
+        Flux<GenericBalance> balances = sapiNonBlockingService.getBalances("1");
 
-        List<GenericBalance> expected2 = new ArrayList<>();
-        expected2.add(ccb);
-
-        assertEquals(Flux.concat(Mono.just(expected1), Mono.just(expected2)), sapiNonBlockingService.getBalances("1"));
+        assertEquals(ccbs, balances.blockFirst());
+        assertEquals(cabs, balances.blockLast());
     }
 }

@@ -6,10 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import schema.GenericBalance;
-
-import java.util.List;
 
 @Service
 public class SapiNonBlockingService {
@@ -24,18 +21,20 @@ public class SapiNonBlockingService {
         this.accountBalanceRetriever = accountBalanceRetriever;
     }
 
-    public Flux<List<GenericBalance>> getBalances(String customerId) {
-        Mono<List<GenericBalance>> ccbs = creditCardBalanceRetriever.getCreditCardBalance(customerId);
-        Mono<List<GenericBalance>> cabs = accountBalanceRetriever.getCurrentAccountBalance(customerId);
+    public Flux<GenericBalance> getBalances(String customerId) {
+        Flux<GenericBalance> ccbs = creditCardBalanceRetriever.getCreditCardBalance(customerId)
+                .flatMapMany(Flux::fromIterable);
+        Flux<GenericBalance> cabs = accountBalanceRetriever.getCurrentAccountBalance(customerId)
+                .flatMapMany(Flux::fromIterable);
 
-        Flux<List<GenericBalance>> mergedPublishers = Flux.concat(ccbs, cabs);
+        Flux<GenericBalance> mergedPublishers = ccbs.mergeWith(cabs);
 
         mergedPublishers.subscribe(SapiNonBlockingService::newSapiResponse);
 
         return mergedPublishers;
     }
 
-    private static void newSapiResponse(List list) {
+    private static void newSapiResponse(GenericBalance genericBalance) {
         System.out.println("A NEW NON-BLOCKING SAPI RESPONSE HAS UPDATED !!! :O ");
     }
 }

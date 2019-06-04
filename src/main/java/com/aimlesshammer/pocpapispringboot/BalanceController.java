@@ -32,7 +32,7 @@ public class BalanceController {
 
 
     @GetMapping("/reactive-balance")
-    public Flux<List<GenericBalance>> getReactiveBalances(@RequestParam("customer-id") String customerId) {
+    public Flux<GenericBalance> getReactiveBalances(@RequestParam("customer-id") String customerId) {
         logger.info(PocPapiSpringbootApplication.LOG_ID + ": Requesting balances for customer: '{}'", customerId);
         return sapiNonBlockingService.getBalances(customerId);
     }
