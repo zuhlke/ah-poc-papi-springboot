@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.aimless-hammer</groupId>
-	<artifactId>poc-papi-springboot</artifactId>
+    <artifactId>ah-poc-papi-springboot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>poc-papi-springboot</name>
+    <name>ah-poc-papi-springboot</name>
 	<description>PoC PAPI with SpringBoot</description>
 
 	<properties>

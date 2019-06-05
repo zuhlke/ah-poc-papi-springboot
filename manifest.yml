@@ -2,4 +2,4 @@
 applications:
 - name: ah-poc-papi-springboot
   memory: 768M
-  path: target/poc-papi-springboot-0.0.1-SNAPSHOT.jar
+  path: target/ah-poc-papi-springboot-0.0.1-SNAPSHOT.jar
