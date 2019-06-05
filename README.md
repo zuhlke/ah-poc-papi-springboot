@@ -60,3 +60,9 @@ then you'll get the response body below:
     }
 ]
 ```
+
+And here's the same response on one line, for copy-paste-into-tests convenience
+
+```
+[{"accountType": "CreditCardAccount","accountNumber": "1234567890","balance": "1234.50"},{"accountType": "CurrentAccount","accountNumber": "64746383648","balance": "34.50"}]
+```
