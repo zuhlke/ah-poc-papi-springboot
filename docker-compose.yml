@@ -1,0 +1,7 @@
+version: "2.4"
+services:
+  papi:
+    build:
+      context: .
+    ports:
+      - "8080:8080"
