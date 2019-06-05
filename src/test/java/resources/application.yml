@@ -1,7 +1,0 @@
-sapi:
-  creditCardBalance:
-    url: "http://ah-poc-sapi-cc-bal.cfapps.io/customer/{CUSTOMER_ID}/balance"
-    health: "http://ah-poc-sapi-cc-bal.cfapps.io/actuator/health"
-  currentAccountBalance:
-    url: "http://ah-poc-sapi-ca-bal.cfapps.io/customer/{CUSTOMER_ID}/balance"
-    health: "http://ah-poc-sapi-ca-bal.cfapps.io/actuator/health"

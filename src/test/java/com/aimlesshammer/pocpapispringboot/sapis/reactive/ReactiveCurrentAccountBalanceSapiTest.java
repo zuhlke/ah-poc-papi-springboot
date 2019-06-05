@@ -29,7 +29,6 @@ import static org.junit.Assert.fail;
 @AutoConfigureWireMock(port = 0)
 @Import({ReactiveCurrentAccountBalanceSapi.class, SapiClientConf.class})
 @TestPropertySource(properties = {
-        "sapi.currentAccountBalance.url=http://localhost:${wiremock.server.port}/customer/{CUSTOMER_ID}/balance",
         "sapi.timeout = 10",
         "sapi.retries = 1",
         "sapi.backoff = 0",

@@ -1,0 +1,34 @@
+server:
+  port: ${PORT:8080}
+
+management:
+  endpoint:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: "*"
+    health:
+      show-details: always
+
+sapi:
+  timeout: 1000
+  retries: 3
+  backoff: 3
+  delay: 0
+
+  creditCardBalance:
+    url: "http://localhost:${wiremock.server.port}/customer/{CUSTOMER_ID}/balance"
+    health: "http://localhost:${wiremock.server.port}/actuator/health"
+    info: "http://localhost:${wiremock.server.port}/actuator/info"
+  currentAccountBalance:
+    url: "http://localhost:${wiremock.server.port}/customer/{CUSTOMER_ID}/balance"
+    health: "http://localhost:${wiremock.server.port}/actuator/health"
+    info: "http://localhost:${wiremock.server.port}/actuator/info"
+
+
+info:
+  dependencies:
+    creditCardBalanceSapi:
+      url: ${sapis.creditCardBalance.info}
+    currentAccountBalanceSapi:
+      url: ${sapis.currentAccountBalance.info}
