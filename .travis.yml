@@ -1,6 +1,6 @@
 language: java
 
-before_deploy:
+script:
   - mvn clean verify
 
 deploy:
