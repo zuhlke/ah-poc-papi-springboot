@@ -1,32 +1,35 @@
 package com.aimlesshammer.pocpapispringboot.sapis.reactive;
 
 import com.aimlesshammer.pocpapispringboot.SapiClientConf;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import com.aimlesshammer.pocpapispringboot.model.reactive.Balance;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import org.apache.http.HttpStatus;
-import org.junit.Rule;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-import com.aimlesshammer.pocpapispringboot.model.reactive.Balance;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 @RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureWireMock(port = 0)
 @Import({ReactiveCreditCardBalanceSapi.class, SapiClientConf.class})
 @TestPropertySource(properties = {
-        "sapi.creditCardBalance.url=http://localhost:8081/customer/{CUSTOMER_ID}/balance",
+        "sapi.creditCardBalance.url=http://localhost:${wiremock.server.port}/customer/{CUSTOMER_ID}/balance",
         "sapi.timeout = 10",
         "sapi.retries = 1",
         "sapi.backoff = 0",
@@ -38,9 +41,10 @@ public class ReactiveCreditCardBalanceSapiTest {
     @Autowired
     private ReactiveCreditCardBalanceSapi retriever;
 
-    @Rule
-    public WireMockRule wireMockRule = new WireMockRule(wireMockConfig().port(8081));
-
+    @After
+    public void setUp(){
+        WireMock.reset();
+    }
 
     @Test
     public void itReturnsAllCreditCardsForAGivenCustomer_WhenCustomerHasCards() {
