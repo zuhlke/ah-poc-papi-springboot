@@ -16,6 +16,7 @@ import reactor.netty.http.client.HttpClient;
  * Client configuration used by all REST calls
  */
 @Configuration
+public
 class SapiClientConf {
 
     private final Logger logger = LoggerFactory.getLogger(SapiClientConf.class);

@@ -1,12 +1,12 @@
 
 package com.aimlesshammer.pocpapispringboot;
 
-import com.aimlesshammer.pocpapispringboot.model.CreditCardBalance;
-import com.aimlesshammer.pocpapispringboot.model.CurrentAccountBalance;
-import com.aimlesshammer.pocpapispringboot.sapis.CreditCardBalanceSapi;
-import com.aimlesshammer.pocpapispringboot.sapis.CurrentAccountBalanceSapi;
+import com.aimlesshammer.pocpapispringboot.model.blocking.CreditCardBalance;
+import com.aimlesshammer.pocpapispringboot.model.blocking.CurrentAccountBalance;
+import com.aimlesshammer.pocpapispringboot.sapis.blocking.CreditCardBalanceSapi;
+import com.aimlesshammer.pocpapispringboot.sapis.blocking.CurrentAccountBalanceSapi;
 import org.springframework.stereotype.Service;
-import schema.GenericBalance;
+import com.aimlesshammer.pocpapispringboot.model.reactive.Balance;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,15 +26,15 @@ public class BalanceBlockingService {
         this.currentAccountBalanceSapi = currentAccountBalanceSapi;
     }
 
-    List<GenericBalance> getBalances(String customerId) {
+    List<Balance> getBalances(String customerId) {
         List<CreditCardBalance> creditCardBalanceList = creditCardBalanceSapi.getData(customerId);
         List<CurrentAccountBalance> currentAccountBalanceList = currentAccountBalanceSapi.getData(customerId);
 
-        List<GenericBalance> ccBalance = creditCardBalanceList.stream()
-                .map(cc -> new GenericBalance("creditCardAccount", cc.getCreditCardNumber(), cc.getBalance()))
+        List<Balance> ccBalance = creditCardBalanceList.stream()
+                .map(cc -> new Balance("creditCardAccount", cc.getCreditCardNumber(), cc.getBalance()))
                 .collect(toList());
-        List<GenericBalance> acBalance = currentAccountBalanceList.stream()
-                .map(cc -> new GenericBalance("currentAccount", cc.getAccountNumber(), cc.getBalance()))
+        List<Balance> acBalance = currentAccountBalanceList.stream()
+                .map(cc -> new Balance("currentAccount", cc.getAccountNumber(), cc.getBalance()))
                 .collect(toList());
 
         return Stream.concat(ccBalance.stream(), acBalance.stream())

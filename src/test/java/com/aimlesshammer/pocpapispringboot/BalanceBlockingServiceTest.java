@@ -1,10 +1,10 @@
 
 package com.aimlesshammer.pocpapispringboot;
 
-import com.aimlesshammer.pocpapispringboot.model.CreditCardBalance;
-import com.aimlesshammer.pocpapispringboot.model.CurrentAccountBalance;
-import com.aimlesshammer.pocpapispringboot.sapis.CreditCardBalanceSapi;
-import com.aimlesshammer.pocpapispringboot.sapis.CurrentAccountBalanceSapi;
+import com.aimlesshammer.pocpapispringboot.model.blocking.CreditCardBalance;
+import com.aimlesshammer.pocpapispringboot.model.blocking.CurrentAccountBalance;
+import com.aimlesshammer.pocpapispringboot.sapis.blocking.CreditCardBalanceSapi;
+import com.aimlesshammer.pocpapispringboot.sapis.blocking.CurrentAccountBalanceSapi;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.client.MockRestServiceServer;
-import schema.GenericBalance;
+import com.aimlesshammer.pocpapispringboot.model.reactive.Balance;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,9 +44,9 @@ public class BalanceBlockingServiceTest {
         when(creditCardBalanceSapi.getData(customerId)).thenReturn(Collections.singletonList(new CreditCardBalance(customerId, creditCardNumber, creditCardBalance)));
         when(currentAccountBalanceSapi.getData(customerId)).thenReturn(Collections.singletonList(new CurrentAccountBalance(customerId, currentAccountNumber, currentAccountBalance)));
 
-        List<GenericBalance> expected = new ArrayList<>();
-        expected.add(new GenericBalance("creditCardAccount", creditCardNumber, creditCardBalance));
-        expected.add(new GenericBalance("currentAccount", currentAccountNumber, currentAccountBalance));
+        List<Balance> expected = new ArrayList<>();
+        expected.add(new Balance("creditCardAccount", creditCardNumber, creditCardBalance));
+        expected.add(new Balance("currentAccount", currentAccountNumber, currentAccountBalance));
         assertEquals(expected, unit.getBalances(customerId));
     }
 }

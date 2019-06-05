@@ -28,7 +28,7 @@ public class BalanceControllerTest {
     private BalanceBlockingService sapiBlockingService;
 
     @MockBean
-    private SapiNonBlockingService sapiNonBlockingService;
+    private BalanceNonBlockingService balanceNonBlockingService;
 
     @Test
     public void itGetAllBalancesFromSapiService() throws Exception {

@@ -1,4 +1,4 @@
-package com.aimlesshammer.pocpapispringboot.model;
+package com.aimlesshammer.pocpapispringboot.model.blocking;
 
 import java.util.Objects;
 

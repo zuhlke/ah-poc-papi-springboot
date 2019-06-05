@@ -11,7 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
-import schema.GenericBalance;
+import com.aimlesshammer.pocpapispringboot.model.reactive.Balance;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -21,16 +21,16 @@ public class ReactiveBalanceControllerTest {
     private WebTestClient webTestClient;
 
     @MockBean
-    private SapiNonBlockingService sapiNonBlockingService;
+    private BalanceNonBlockingService balanceNonBlockingService;
 
     @Test
     public void itGetAllBalancesFromReactiveSapiService() throws Exception {
-        Flux<GenericBalance> stubbedFlux = Flux.just(
-                new GenericBalance("CreditCardAccount", "1", "10.5"),
-                new GenericBalance("CurrentAccount", "2", "11.5"),
-                new GenericBalance("CurrentAccount", "3", "12.5")
+        Flux<Balance> stubbedFlux = Flux.just(
+                new Balance("CreditCardAccount", "1", "10.5"),
+                new Balance("CurrentAccount", "2", "11.5"),
+                new Balance("CurrentAccount", "3", "12.5")
         );
-        Mockito.when(sapiNonBlockingService.getBalances("1")).thenReturn(stubbedFlux);
+        Mockito.when(balanceNonBlockingService.getBalances("1")).thenReturn(stubbedFlux);
 
         String jsonBlob = new ObjectMapper().writeValueAsString(stubbedFlux.collectList().block());
         webTestClient.get().uri("http://localhost:8080/reactive-balance?customer-id=1")

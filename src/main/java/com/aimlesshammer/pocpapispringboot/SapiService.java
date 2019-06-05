@@ -1,8 +1,8 @@
 package com.aimlesshammer.pocpapispringboot;
 
 import reactor.core.publisher.Flux;
-import schema.GenericBalance;
+import com.aimlesshammer.pocpapispringboot.model.reactive.Balance;
 
 public interface SapiService {
-    Flux<GenericBalance> getBalances(String customerId);
+    Flux<Balance> getBalances(String customerId);
 }

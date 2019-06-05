@@ -1,4 +1,4 @@
-package com.aimlesshammer.pocpapispringboot;
+package com.aimlesshammer.pocpapispringboot.sapis.reactive;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +11,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriTemplate;
 import reactor.core.publisher.Mono;
 import reactor.retry.Retry;
-import schema.CurrentAccountBalance;
-import schema.GenericBalance;
+import com.aimlesshammer.pocpapispringboot.model.reactive.CreditCardBalance;
+import com.aimlesshammer.pocpapispringboot.model.reactive.Balance;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -21,14 +21,17 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @Service
-public class AccountBalanceRetriever {
-    private final Logger logger = LoggerFactory.getLogger(AccountBalanceRetriever.class);
+public class ReactiveCreditCardBalanceSapi {
+    private final Logger logger = LoggerFactory.getLogger(ReactiveCreditCardBalanceSapi.class);
 
     private final WebClient webClient;
-    private static final String API_ERROR = "Failed to get current account balances";
+    private static final String API_ERROR = "Failed to get credit card balances";
 
-    @Value("${sapi.currentAccountBalance.url}")
-    private String currentAccountBalanceUrlTemplate;
+    @Value("${sapi.creditCardBalance.url}")
+    private String creditCardBalanceUrlTemplate;
+
+    @Value("${sapi.creditCardBalance.health}")
+    private String healthUrl;
 
     @Value("${sapi.retries}")
     private int retries;
@@ -37,24 +40,24 @@ public class AccountBalanceRetriever {
     private int backoff;
 
     @Autowired
-    public AccountBalanceRetriever(WebClient webClient) {
+    public ReactiveCreditCardBalanceSapi(WebClient webClient) {
         this.webClient = webClient;
     }
 
-    public Mono<List<GenericBalance>> getCurrentAccountBalance(String customerId) {
-        logger.info("Getting current account balance for customer {}", customerId);
+    public Mono<List<Balance>> getCreditCardBalance(String customerId) {
+        logger.info("Getting credit card balances for customer {}", customerId);
 
-        String url = expandUrl(currentAccountBalanceUrlTemplate, customerId);
+        String url = expandUrl(creditCardBalanceUrlTemplate, customerId);
 
         return webClient.get()
                 .uri(url)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .onStatus(HttpStatus::isError, response -> Mono.error(new SapiApiException(API_ERROR + ": " + response.statusCode())))
-                .bodyToMono(CurrentAccountBalance[].class)
+                .bodyToMono(CreditCardBalance[].class)
                 .map(Arrays::asList)
                 .map(List::stream)
-                .map(ccb -> ccb.map(cc -> new GenericBalance("CurrentAccount", cc.getAccountNumber(), cc.getBalance()))
+                .map(ccb -> ccb.map(cc -> new Balance("CreditCardAccount", cc.getCreditCardNumber(), cc.getBalance()))
                         .collect(toList()))
                 .retryWhen(Retry.any()
                         .fixedBackoff(Duration.ofSeconds(backoff))

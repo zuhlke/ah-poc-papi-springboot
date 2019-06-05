@@ -1,6 +1,6 @@
-package com.aimlesshammer.pocpapispringboot.sapis;
+package com.aimlesshammer.pocpapispringboot.sapis.blocking;
 
-import com.aimlesshammer.pocpapispringboot.model.CurrentAccountBalance;
+import com.aimlesshammer.pocpapispringboot.model.blocking.CurrentAccountBalance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

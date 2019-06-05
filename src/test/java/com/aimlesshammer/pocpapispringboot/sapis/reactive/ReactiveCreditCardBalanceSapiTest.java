@@ -1,9 +1,9 @@
-package com.aimlesshammer.pocpapispringboot;
+package com.aimlesshammer.pocpapispringboot.sapis.reactive;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
+import com.aimlesshammer.pocpapispringboot.SapiClientConf;
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import org.apache.http.HttpStatus;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,44 +12,35 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-import schema.GenericBalance;
+import com.aimlesshammer.pocpapispringboot.model.reactive.Balance;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 @RunWith(SpringRunner.class)
-@Import({CreditCardBalanceRetriever.class, SapiClientConf.class})
+@Import({ReactiveCreditCardBalanceSapi.class, SapiClientConf.class})
 @TestPropertySource(properties = {
-        "sapi.creditCardBalance.url=http://localhost:8080/customer/{CUSTOMER_ID}/balance",
+        "sapi.creditCardBalance.url=http://localhost:8081/customer/{CUSTOMER_ID}/balance",
         "sapi.timeout = 10",
         "sapi.retries = 1",
         "sapi.backoff = 0",
         "sapi.delay = 0",
 })
-public class CreditCardBalanceRetrieverTest {
+public class ReactiveCreditCardBalanceSapiTest {
     private static final String API_CC_ACCOUNTS = "/customer/1/balance";
-    private static final WireMockServer wireMockServer = new WireMockServer();
 
     @Autowired
-    private CreditCardBalanceRetriever retriever;
+    private ReactiveCreditCardBalanceSapi retriever;
 
-    @Before
-    public void setup() {
-        wireMockServer.start();
-        configureFor("localhost", 8080);
-    }
+    @Rule
+    public WireMockRule wireMockRule = new WireMockRule(wireMockConfig().port(8081));
 
-    @After
-    public void tearDown() {
-        verify(getRequestedFor(urlEqualTo(API_CC_ACCOUNTS)));
-        wireMockServer.resetAll();
-        wireMockServer.stop();
-    }
 
     @Test
     public void itReturnsAllCreditCardsForAGivenCustomer_WhenCustomerHasCards() {
@@ -64,8 +55,8 @@ public class CreditCardBalanceRetrieverTest {
                 .withBody(response)
                 .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE)));
 
-        List<GenericBalance> ccbs = new ArrayList<>();
-        GenericBalance ccb = new GenericBalance("CreditCardAccount", "1234567890", "1234.50");
+        List<Balance> ccbs = new ArrayList<>();
+        Balance ccb = new Balance("CreditCardAccount", "1234567890", "1234.50");
         ccbs.add(ccb);
 
         assertEquals(ccbs, retriever.getCreditCardBalance("1").block());

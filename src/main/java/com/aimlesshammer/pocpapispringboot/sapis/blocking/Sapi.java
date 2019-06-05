@@ -1,6 +1,6 @@
-package com.aimlesshammer.pocpapispringboot.sapis;
+package com.aimlesshammer.pocpapispringboot.sapis.blocking;
 
-import com.aimlesshammer.pocpapispringboot.model.HealthStatus;
+import com.aimlesshammer.pocpapispringboot.model.blocking.HealthStatus;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.web.client.RestTemplateBuilder;

@@ -1,6 +1,6 @@
-package com.aimlesshammer.pocpapispringboot.sapis;
+package com.aimlesshammer.pocpapispringboot.sapis.blocking;
 
-import com.aimlesshammer.pocpapispringboot.model.CreditCardBalance;
+import com.aimlesshammer.pocpapispringboot.model.blocking.CreditCardBalance;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

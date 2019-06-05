@@ -1,5 +1,5 @@
 
-package schema;
+package com.aimlesshammer.pocpapispringboot.model.reactive;
 
 import com.fasterxml.jackson.annotation.*;
 
@@ -10,15 +10,15 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "customerId",
-        "creditCardNumber",
+        "accountNumber",
         "balance"
 })
-public class CreditCardBalance extends GenericBalance {
+public class CurrentAccountBalance {
 
     @JsonProperty("customerId")
     private String customerId;
-    @JsonProperty("creditCardNumber")
-    private String creditCardNumber;
+    @JsonProperty("accountNumber")
+    private String accountNumber;
     @JsonProperty("balance")
     private String balance;
     @JsonIgnore
@@ -27,19 +27,19 @@ public class CreditCardBalance extends GenericBalance {
     /**
      * No args constructor for use in serialization
      */
-    public CreditCardBalance() {
+    public CurrentAccountBalance() {
         super();
     }
 
     /**
      * @param balance
+     * @param accountNumber
      * @param customerId
-     * @param creditCardNumber
      */
-    public CreditCardBalance(String customerId, String creditCardNumber, String balance) {
+    public CurrentAccountBalance(String customerId, String accountNumber, String balance) {
         super();
         this.customerId = customerId;
-        this.creditCardNumber = creditCardNumber;
+        this.accountNumber = accountNumber;
         this.balance = balance;
     }
 
@@ -53,14 +53,14 @@ public class CreditCardBalance extends GenericBalance {
         this.customerId = customerId;
     }
 
-    @JsonProperty("creditCardNumber")
-    public String getCreditCardNumber() {
-        return creditCardNumber;
+    @JsonProperty("accountNumber")
+    public String getAccountNumber() {
+        return accountNumber;
     }
 
-    @JsonProperty("creditCardNumber")
-    public void setCreditCardNumber(String creditCardNumber) {
-        this.creditCardNumber = creditCardNumber;
+    @JsonProperty("accountNumber")
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     @JsonProperty("balance")
@@ -87,15 +87,15 @@ public class CreditCardBalance extends GenericBalance {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CreditCardBalance that = (CreditCardBalance) o;
+        CurrentAccountBalance that = (CurrentAccountBalance) o;
         return Objects.equals(customerId, that.customerId) &&
-                Objects.equals(creditCardNumber, that.creditCardNumber) &&
+                Objects.equals(accountNumber, that.accountNumber) &&
                 Objects.equals(balance, that.balance) &&
                 Objects.equals(additionalProperties, that.additionalProperties);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(customerId, creditCardNumber, balance, additionalProperties);
+        return Objects.hash(customerId, accountNumber, balance, additionalProperties);
     }
 }

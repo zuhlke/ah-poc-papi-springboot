@@ -1,4 +1,4 @@
-package com.aimlesshammer.pocpapispringboot;
+package com.aimlesshammer.pocpapispringboot.sapis.reactive;
 
 /**
  * Exception thrown by failed API calls

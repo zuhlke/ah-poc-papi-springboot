@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
-import schema.GenericBalance;
+import com.aimlesshammer.pocpapispringboot.model.reactive.Balance;
 
 import java.util.List;
 
@@ -15,25 +15,25 @@ public class BalanceController {
 
     private static final Logger logger = LoggerFactory.getLogger(BalanceController.class);
     private BalanceBlockingService balanceBlockingService;
-    private SapiNonBlockingService sapiNonBlockingService;
+    private BalanceNonBlockingService balanceNonBlockingService;
 
-    public BalanceController(BalanceBlockingService balanceBlockingService, SapiNonBlockingService sapiNonBlockingService) {
+    public BalanceController(BalanceBlockingService balanceBlockingService, BalanceNonBlockingService balanceNonBlockingService) {
         this.balanceBlockingService = balanceBlockingService;
-        this.sapiNonBlockingService = sapiNonBlockingService;
+        this.balanceNonBlockingService = balanceNonBlockingService;
     }
 
     @GetMapping("/balance")
-    public List<GenericBalance> getBalances(@RequestParam("customer-id") String customerId) {
+    public List<Balance> getBalances(@RequestParam("customer-id") String customerId) {
         logger.info(PocPapiSpringbootApplication.LOG_ID + ": Requesting balances for customer: '{}'", customerId);
-        List<GenericBalance> allBalances = balanceBlockingService.getBalances(customerId);
+        List<Balance> allBalances = balanceBlockingService.getBalances(customerId);
         logger.info(PocPapiSpringbootApplication.LOG_ID + ": Returning aggregated balances for customer: '{}', balances: '{}'", customerId, allBalances);
         return allBalances;
     }
 
 
     @GetMapping("/reactive-balance")
-    public Flux<GenericBalance> getReactiveBalances(@RequestParam("customer-id") String customerId) {
+    public Flux<Balance> getReactiveBalances(@RequestParam("customer-id") String customerId) {
         logger.info(PocPapiSpringbootApplication.LOG_ID + ": Requesting balances for customer: '{}'", customerId);
-        return sapiNonBlockingService.getBalances(customerId);
+        return balanceNonBlockingService.getBalances(customerId);
     }
 }

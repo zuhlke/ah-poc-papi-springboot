@@ -1,5 +1,5 @@
 
-package schema;
+package com.aimlesshammer.pocpapispringboot.model.reactive;
 
 import com.fasterxml.jackson.annotation.*;
 
@@ -13,7 +13,7 @@ import java.util.Objects;
         "accountNumber",
         "balance"
 })
-public class GenericBalance {
+public class Balance {
 
     @JsonProperty("accountType")
     private String accountType;
@@ -27,7 +27,7 @@ public class GenericBalance {
     /**
      * No args constructor for use in serialization
      **/
-    public GenericBalance() {
+    public Balance() {
     }
 
     /**
@@ -35,7 +35,7 @@ public class GenericBalance {
      * @param accountNumber
      * @param accountType
      */
-    public GenericBalance(String accountType, String accountNumber, String balance) {
+    public Balance(String accountType, String accountNumber, String balance) {
         super();
         this.accountType = accountType;
         this.accountNumber = accountNumber;
@@ -86,7 +86,7 @@ public class GenericBalance {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        GenericBalance that = (GenericBalance) o;
+        Balance that = (Balance) o;
         return Objects.equals(accountType, that.accountType) &&
                 Objects.equals(accountNumber, that.accountNumber) &&
                 Objects.equals(balance, that.balance) &&
@@ -96,5 +96,15 @@ public class GenericBalance {
     @Override
     public int hashCode() {
         return Objects.hash(accountType, accountNumber, balance, additionalProperties);
+    }
+
+    @Override
+    public String toString() {
+        return "Balance{" +
+                "accountType='" + accountType + '\'' +
+                ", accountNumber='" + accountNumber + '\'' +
+                ", balance='" + balance + '\'' +
+                ", additionalProperties=" + additionalProperties +
+                '}';
     }
 }

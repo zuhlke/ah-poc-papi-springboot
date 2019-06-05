@@ -1,5 +1,5 @@
 
-package schema;
+package com.aimlesshammer.pocpapispringboot.model.reactive;
 
 import com.fasterxml.jackson.annotation.*;
 
@@ -10,15 +10,15 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "customerId",
-        "accountNumber",
+        "creditCardNumber",
         "balance"
 })
-public class CurrentAccountBalance {
+public class CreditCardBalance extends Balance {
 
     @JsonProperty("customerId")
     private String customerId;
-    @JsonProperty("accountNumber")
-    private String accountNumber;
+    @JsonProperty("creditCardNumber")
+    private String creditCardNumber;
     @JsonProperty("balance")
     private String balance;
     @JsonIgnore
@@ -27,19 +27,19 @@ public class CurrentAccountBalance {
     /**
      * No args constructor for use in serialization
      */
-    public CurrentAccountBalance() {
+    public CreditCardBalance() {
         super();
     }
 
     /**
      * @param balance
-     * @param accountNumber
      * @param customerId
+     * @param creditCardNumber
      */
-    public CurrentAccountBalance(String customerId, String accountNumber, String balance) {
+    public CreditCardBalance(String customerId, String creditCardNumber, String balance) {
         super();
         this.customerId = customerId;
-        this.accountNumber = accountNumber;
+        this.creditCardNumber = creditCardNumber;
         this.balance = balance;
     }
 
@@ -53,14 +53,14 @@ public class CurrentAccountBalance {
         this.customerId = customerId;
     }
 
-    @JsonProperty("accountNumber")
-    public String getAccountNumber() {
-        return accountNumber;
+    @JsonProperty("creditCardNumber")
+    public String getCreditCardNumber() {
+        return creditCardNumber;
     }
 
-    @JsonProperty("accountNumber")
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
+    @JsonProperty("creditCardNumber")
+    public void setCreditCardNumber(String creditCardNumber) {
+        this.creditCardNumber = creditCardNumber;
     }
 
     @JsonProperty("balance")
@@ -87,15 +87,15 @@ public class CurrentAccountBalance {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CurrentAccountBalance that = (CurrentAccountBalance) o;
+        CreditCardBalance that = (CreditCardBalance) o;
         return Objects.equals(customerId, that.customerId) &&
-                Objects.equals(accountNumber, that.accountNumber) &&
+                Objects.equals(creditCardNumber, that.creditCardNumber) &&
                 Objects.equals(balance, that.balance) &&
                 Objects.equals(additionalProperties, that.additionalProperties);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(customerId, accountNumber, balance, additionalProperties);
+        return Objects.hash(customerId, creditCardNumber, balance, additionalProperties);
     }
 }
