@@ -1,0 +1,9 @@
+sapi:
+  creditCardBalance:
+    url: "http://${CC_SAPI}:${CC_SAPI_PORT}/customer/{CUSTOMER_ID}/balance"
+    health: "http://${CC_SAPI}:${CC_SAPI_PORT}/actuator/health"
+    info: "http://${CC_SAPI}:${CC_SAPI_PORT}/actuator/info"
+  currentAccountBalance:
+    url: "http://${CA_SAPI}:${CA_SAPI_PORT}/customer/{CUSTOMER_ID}/balance"
+    health: "http://${CA_SAPI}:${CA_SAPI_PORT}/actuator/health"
+    info: "http://${CA_SAPI}:${CA_SAPI_PORT}/actuator/info"

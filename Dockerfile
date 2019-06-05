@@ -17,5 +17,5 @@ ENTRYPOINT ["mvn", "test"]
 
 FROM openjdk:8
 COPY --from=build /app/target/*.jar /app/papi.jar
-EXPOSE 8080
-ENTRYPOINT ["java","-jar","/app/papi.jar"]
+EXPOSE ${PORT:-8080}
+CMD ["java","-jar","/app/papi.jar"]

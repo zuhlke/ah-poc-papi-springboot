@@ -3,5 +3,28 @@ services:
   papi:
     build:
       context: .
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      PORT: 8081
+      CC_SAPI: cc-sapi
+      CC_SAPI_PORT: 8082
+      CA_SAPI: ca-sapi
+      CA_SAPI_PORT: 8083
     ports:
-      - "8080:8080"
+      - "8081:8081"
+
+  cc-sapi:
+      build:
+        context: ../ah-poc-sapi-cc-bal
+      environment:
+        PORT: 8082
+      ports:
+        - "8082:8082"
+
+  ca-sapi:
+      build:
+        context: ../ah-poc-sapi-ca-bal
+      environment:
+        PORT: 8083
+      ports:
+        - "8083:8083"
