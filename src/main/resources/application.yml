@@ -2,11 +2,12 @@ server:
   port: ${PORT:8080}
 
 management:
-  endpoint:
+  endpoints:
     enabled-by-default: true
     web:
       exposure:
         include: "*"
+  endpoint:
     health:
       show-details: always
 
