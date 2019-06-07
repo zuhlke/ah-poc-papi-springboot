@@ -1,12 +1,11 @@
 package com.aimlesshammer.pocpapispringboot;
 
+import au.com.dius.pact.consumer.ConsumerPactTestMk2;
+import au.com.dius.pact.consumer.MockServer;
 import au.com.dius.pact.consumer.Pact;
-import au.com.dius.pact.consumer.PactProviderRuleMk2;
-import au.com.dius.pact.consumer.PactVerification;
+import au.com.dius.pact.consumer.PactTestExecutionContext;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.model.RequestResponsePact;
-import org.junit.Rule;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,25 +28,28 @@ import java.util.Map;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWireMock(port = 0)
-public class SapiCCContractTest {
+public class SapiCCContractTest extends ConsumerPactTestMk2 {
 
     @Value("${sapi.creditCardBalance.url}")
     private String creditCardBalanceUrl;
 
     @Value("${wiremock.server.port}")
     private int port;
-    /*
-     * This setups Wiremock to mock our provider
-     */
-    @Rule
-    public PactProviderRuleMk2 mockSapiCC
-            = new PactProviderRuleMk2("SAPI_CC", creditCardBalanceUrl, port, this);
+
     @Autowired
     private WebTestClient webTestClient;
 
-    /*
-     * This builds the contract and adds it to /target/pacts
-     */
+    @Override
+    protected String providerName() {
+        return "SAPI_CC";
+    }
+
+    @Override
+    protected String consumerName() {
+        return "PAPI_BALANCES";
+    }
+
+    @Override
     @Pact(consumer = "balances_papi")
     public RequestResponsePact createPact(PactDslWithProvider builder) {
         Map<String, String> headers = new HashMap<>();
@@ -64,14 +67,10 @@ public class SapiCCContractTest {
                 .toPact();
     }
 
-    /*
-    This verifies the contract against the Pact mockSapiCC
-     */
-    @Test
-    @PactVerification()
-    public void givenGet_whenSendRequest_shouldReturn200WithProperHeaderAndBody() {
+    @Override
+    protected void runTest(MockServer mockServer, PactTestExecutionContext pactTestExecutionContext) throws IOException {
         webTestClient.get()
-                .uri(mockSapiCC.getUrl() + "/customer/10101010/balance")
+                .uri(mockServer.getUrl() + "/customer/10101010/balance")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .exchange()
                 .expectStatus().isOk()
